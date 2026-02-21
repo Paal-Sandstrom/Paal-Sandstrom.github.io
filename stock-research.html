@@ -1,65 +1,200 @@
-<style>
-    /* ... keep your existing body and background styles ... */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Research - Pål Sandström</title>
+    <style>
+        /* KEEPING YOUR EXACT STYLES */
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #cbd5e1;
+            background-color: #050505; 
+            margin: 0;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
 
-    .stock-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 25px;
-        max-width: 1200px;
-        width: 100%;
-        z-index: 1;
+        #dataNetwork {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.7; 
+        }
+
+        .nav-header {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(16, 185, 129, 0.3);
+            z-index: 1;
+        }
+        .nav-header h1 { margin: 0; color: #f8fafc; font-size: 2.2em; }
+
+        .stock-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            width: 100%;
+            z-index: 1;
+        }
+
+        /* The Card - Now acts as a link container */
+        .stock-card {
+            background-color: rgba(20, 25, 35, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            text-decoration: none; /* Important for the <a> tag */
+            color: inherit;
+        }
+
+        .stock-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: #38bdf8;
+            box-shadow: 0 15px 30px rgba(56, 189, 248, 0.2);
+            background-color: rgba(30, 35, 45, 0.8);
+        }
+
+        .stock-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .stock-name { color: #f8fafc; font-size: 1.4em; font-weight: bold; margin: 0; }
+        .stock-ticker { background: #2563eb; color: white; padding: 3px 8px; border-radius: 6px; font-size: 0.75em; font-family: monospace; }
+        
+        .stock-info { font-size: 0.9em; color: #94a3b8; margin: 2px 0; display: flex; align-items: center; gap: 8px; }
+        .stock-info span { color: #cbd5e1; }
+    </style>
+</head>
+<body>
+
+<canvas id="dataNetwork"></canvas>
+
+<div class="nav-header">
+    <h1>Equity Research Hub</h1>
+    <div style="color: #10b981; font-weight: bold;">Pål Sandström</div>
+</div>
+
+<div class="stock-grid" id="stockGrid"></div>
+
+<script>
+    // 1. UPDATED DATABASE (No more 'content' bloat, just the path to your file)
+    const stocks = [
+        { id: 'nichirei', name: 'Nichirei Corp', ticker: '2871.T', country: '🇯🇵 Japan', industry: 'Food & Logistics' },
+        { id: 'lifedrink', name: 'Lifedrink Co.', ticker: '2585.T', country: '🇯🇵 Japan', industry: 'Beverages' },
+        { id: 'paypal', name: 'PayPal Holdings', ticker: 'PYPL', country: '🇺🇸 USA', industry: 'FinTech' },
+        { id: 'amazon', name: 'Amazon.com', ticker: 'AMZN', country: '🇺🇸 USA', industry: 'E-commerce' },
+        { id: 'alphabet', name: 'Alphabet Inc', ticker: 'GOOGL', country: '🇺🇸 USA', industry: 'Tech' },
+        { id: 'nv5', name: 'NV5 Global', ticker: 'NVEE', country: '🇺🇸 USA', industry: 'Engineering' },
+        { id: 'nordea', name: 'Nordea Bank', ticker: 'NDA-FI', country: '🇫🇮 Finland', industry: 'Banking' },
+        { id: 'ubisoft', name: 'Ubisoft Ent.', ticker: 'UBI.PA', country: '🇫🇷 France', industry: 'Gaming' },
+        { id: 'nintendo', name: 'Nintendo Co.', ticker: '7974.T', country: '🇯🇵 Japan', industry: 'Gaming' }
+    ];
+
+    // 2. RENDER THE GRID (Cards now act as links)
+    const gridContainer = document.getElementById('stockGrid');
+
+    stocks.forEach(stock => {
+        const card = document.createElement('a'); // Changed from 'div' to 'a'
+        card.className = 'stock-card';
+        card.href = `research/${stock.id}.html`; // Links to research/nichirei.html, etc.
+        
+        card.innerHTML = `
+            <div class="stock-header">
+                <h3 class="stock-name">${stock.name}</h3>
+                <span class="stock-ticker">${stock.ticker}</span>
+            </div>
+            <p class="stock-info">🌎 <span>${stock.country}</span></p>
+            <p class="stock-info">🏢 <span>${stock.industry}</span></p>
+        `;
+        
+        gridContainer.appendChild(card);
+    });
+
+    // 3. ANIMATED DATA NETWORK BACKGROUND (Keeping your original logic)
+    const canvas = document.getElementById("dataNetwork");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particlesArray = [];
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2 + 1;
+            this.speedX = Math.random() * 0.8 - 0.4;
+            this.speedY = Math.random() * 0.8 - 0.4;
+        }
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+            if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+        }
+        draw() {
+            ctx.fillStyle = 'rgba(16, 185, 129, 0.9)'; 
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
     }
 
-    /* Redesigned Card as a Link */
-    .stock-card {
-        background-color: rgba(20, 25, 35, 0.7);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 16px;
-        padding: 25px;
-        text-decoration: none; /* Removes underline from links */
-        color: inherit;
-        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        display: flex;
-        flex-direction: column;
+    function init() {
+        particlesArray = [];
+        for (let i = 0; i < 80; i++) { particlesArray.push(new Particle()); }
     }
 
-    .stock-card:hover {
-        transform: translateY(-8px);
-        border-color: #10b981;
-        box-shadow: 0 15px 30px rgba(16, 185, 129, 0.15);
-        background-color: rgba(30, 35, 45, 0.9);
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < particlesArray.length; i++) {
+            particlesArray[i].update();
+            particlesArray[i].draw();
+            for (let j = i; j < particlesArray.length; j++) {
+                const dx = particlesArray[i].x - particlesArray[j].x;
+                const dy = particlesArray[i].y - particlesArray[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                if (distance < 140) { 
+                    ctx.beginPath();
+                    ctx.strokeStyle = `rgba(56, 189, 248, ${0.8 - distance/140})`;
+                    ctx.lineWidth = 1.2; 
+                    ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
+                    ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
+                    ctx.stroke();
+                }
+            }
+        }
+        requestAnimationFrame(animate);
     }
 
-    .card-footer {
-        margin-top: auto;
-        padding-top: 15px;
-        border-top: 1px solid rgba(255,255,255,0.05);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        init();
+    });
 
-    .btn-view {
-        font-size: 0.8em;
-        color: #10b981;
-        font-weight: bold;
-        text-transform: uppercase;
-    }
-</style>
+    init();
+    animate();
+</script>
 
-<div class="stock-grid">
-    <a href="research/nichirei.html" class="stock-card">
-        <div class="stock-header">
-            <h3 class="stock-name">Nichirei Corp</h3>
-            <span class="stock-ticker" style="background: #e11d48;">2871.T</span>
-        </div>
-        <p class="stock-info">🌎 <span>Japan</span></p>
-        <p class="stock-info">🏢 <span>Food & Logistics</span></p>
-        <div class="card-footer">
-            <span style="color: #94a3b8; font-size: 0.85em;">Updated: Feb 2026</span>
-            <span class="btn-view">View Analysis →</span>
-        </div>
-    </a>
-
-    </div>
+</body>
+</html>
