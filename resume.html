@@ -67,7 +67,7 @@
                 <p>📞 +46 72 233 2622</p>
             </div>
         </div>
-        <button class="toggle-btn" onclick="toggleLanguage()">🇸🇪 Byt till Svenska</button>
+        <button class="toggle-btn" onclick="toggleLanguage()">Svenska</button>
     </div>
 
     <div class="lang-en">
@@ -187,13 +187,13 @@
             // Switch to Swedish
             enElements.forEach(el => el.style.display = 'none');
             svElements.forEach(el => el.style.display = 'block');
-            btn.innerHTML = '🇬🇧 Switch to English';
+            btn.innerHTML = 'English';
             currentLang = 'sv';
         } else {
             // Switch to English
             enElements.forEach(el => el.style.display = 'block');
             svElements.forEach(el => el.style.display = 'none');
-            btn.innerHTML = '🇸🇪 Byt till Svenska';
+            btn.innerHTML = 'Svenska';
             currentLang = 'en';
         }
     }
