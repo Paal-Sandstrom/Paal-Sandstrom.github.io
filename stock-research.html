@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Research - Pål Sandström</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #cbd5e1;
+            background-color: #050505; 
+            margin: 0;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Animated Background Canvas */
+        #dataNetwork {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.7; 
+        }
+
+        /* Top Navigation */
+        .nav-header {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(16, 185, 129, 0.3);
+            z-index: 1;
+        }
+        .nav-header h1 { margin: 0; color: #f8fafc; font-size: 2.2em; }
+        .btn-back {
+            padding: 10px 20px;
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border: 1px solid #10b981;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .btn-back:hover { background: #10b981; color: #050505; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+
+        /* Bento Grid Layout for Research */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            max-width: 1200px;
+            width: 100%;
+            z-index: 1;
+        }
+
+        /* Individual Glass Panels */
+        .bento-panel {
+            background-color: rgba(20, 25, 35, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .bento-panel:hover {
+            transform: translateY(-5px);
+            border-color: rgba(56, 189, 248, 0.4);
+        }
+        .panel-full { grid-column: span 2; }
+
+        @media (max-width: 900px) {
+            .bento-grid { grid-template-columns: 1fr; }
+            .panel-full { grid-column: span 1; }
+        }
+
+        /* Typography & Headers inside Panels */
+        h2 { color: #f8fafc; margin-top: 0; margin-bottom: 5px; font-size: 1.8em; display: flex; justify-content: space-between; align-items: center; }
+        .ticker { background: #2563eb; color: white; padding: 4px 10px; border-radius: 6px; font-size: 0.55em; letter-spacing: 1px; vertical-align: middle;}
+        h3 { color: #38bdf8; font-size: 1.2em; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; margin-top: 25px;}
+        p { color: #cbd5e1; font-size: 1.05em; margin-bottom: 15px; }
+        ul { color: #94a3b8; padding-left: 20px; }
+        li { margin-bottom: 8px; }
+        strong { color: #f8fafc; }
+
+        /* Financial Tables (Bloomberg Style) */
+        .fin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: rgba(10, 10, 15, 0.6);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .fin-table th, .fin-table td {
+            padding: 12px 15px;
+            text-align: right;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .fin-table th { background: rgba(37, 99, 235, 0.2); color: #38bdf8; text-align: left; font-family: 'Segoe UI', sans-serif; font-size: 0.9em; text-transform: uppercase;}
+        .fin-table td:first-child { text-align: left; color: #94a3b8; font-family: 'Segoe UI', sans-serif; font-weight: bold;}
+        .fin-table .highlight-green { color: #10b981; font-weight: bold; }
+
+        /* Fake Code/Model Link */
+        .model-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #f8fafc;
+            text-decoration: none;
+            border-radius: 8px;
+            font-family: monospace;
+            transition: all 0.2s;
+        }
+        .model-link:hover { background: rgba(56, 189, 248, 0.15); border-color: #38bdf8; }
+        .model-icon { width: 12px; height: 12px; border-radius: 50%; background: #ffbd2e; }
+    </style>
+</head>
+<body>
+
+<canvas id="dataNetwork"></canvas>
+
+<div class="nav-header">
+    <h1>Equity Research</h1>
+    <a href="index.html" class="btn-back">← Back to Hub</a>
+</div>
+
+<div class="bento-grid">
+
+    <div class="bento-panel panel-full" style="padding: 30px; text-align: center;">
+        <p style="margin: 0; font-size: 1.2em; color: #94a3b8;">Focusing on fundamental analysis, free cash flow valuation, and mispriced operational efficiencies within the Japanese equity market.</p>
+    </div>
+
+    <div class="bento-panel">
+        <h2>Lifedrink Company <span class="ticker">BEVERAGE</span></h2>
+        [cite_start]<p><strong>Market Cap:</strong> ¥93.5 Billion [cite: 46]</p>
+
+        <h3>Investment Thesis</h3>
+        <p>Lifedrink presents a masterclass in operational focus and radical standardization. [cite_start]Between 2010 and 2020, management ruthlessly trimmed the fat by divesting non-core businesses (including solar panels, ramen, and ice)[cite: 46].</p>
+        [cite_start]<p>Today, they strictly focus on a radically standardized production process for high-volume, low-cost beverages (water and teas)[cite: 46]. [cite_start]While competitors maintain bloated portfolios with endless variety, Lifedrink knows exactly what they are good at and sticks to what generates actual cash flow[cite: 46].</p>
+        
+        <h3>Key Drivers</h3>
+        <ul>
+            [cite_start]<li><strong>Scale & Footprint:</strong> Operating 13 factories across Japan[cite: 46], mitigating logistics costs and fuel price volatility.</li>
+            [cite_start]<li><strong>E-Commerce Growth:</strong> Strong awareness and structural growth in direct website sales and Amazon distribution[cite: 46].</li>
+            [cite_start]<li><strong>Capacity Expansion:</strong> Expanding the Gotemba facility to meet demand that currently outpaces supply[cite: 46].</li>
+        </ul>
+
+        <table class="fin-table">
+            <tr>
+                <th>Financial Snapshot (FQ2 2025)</th>
+                <th>Actual (¥M)</th>
+            </tr>
+            <tr>
+                <td>Revenue</td>
+                [cite_start]<td>12,779 [cite: 68]</td>
+            </tr>
+            <tr>
+                <td>Gross Profit</td>
+                [cite_start]<td>5,638 [cite: 68]</td>
+            </tr>
+            <tr>
+                <td>Operating Income</td>
+                [cite_start]<td class="highlight-green">1,817 [cite: 68]</td>
+            </tr>
+        </table>
+        
+        <a href="#" class="model-link">
+            <div class="model-icon"></div>
+            view_financial_model.xlsx
+        </a>
+    </div>
+
+    <div class="bento-panel">
+        <h2>Nichirei Corp <span class="ticker">TSE: 2871</span></h2>
+        [cite_start]<p><strong>Market Cap:</strong> ¥432.3 Billion [cite: 43] | [cite_start]<strong>Current Price:</strong> ¥1,722.5 [cite: 45]</p>
+
+        <h3>Investment Thesis</h3>
+        [cite_start]<p>Nichirei operates across Logistics (36.6% of revenue) and Processed Foods (41.3%)[cite: 37]. The core thesis rests on a fortress balance sheet and highly shareholder-friendly capital allocation. [cite_start]The company holds almost enough current assets to completely pay off all total liabilities[cite: 42], providing a massive margin of safety.</p>
+        [cite_start]<p>Furthermore, management has a proven track record of opportunistic share buybacks whenever operational results underwhelm[cite: 40], providing a continuous floor for the stock price and signaling deep value to investors.</p>
+
+        <h3>Valuation Output (DCF Model)</h3>
+        <ul>
+            [cite_start]<li><strong>Long-term Growth Rate:</strong> 9.0% [cite: 43]</li>
+            [cite_start]<li><strong>Discount Rate:</strong> 10.0% [cite: 43]</li>
+            [cite_start]<li><strong>Fair Value Output:</strong> Implied upside to ~¥1,864 per share[cite: 45].</li>
+        </ul>
+
+        <table class="fin-table">
+            <tr>
+                <th>Capital Allocation (FY 24-25)</th>
+                <th>Cash (¥M)</th>
+            </tr>
+            <tr>
+                <td>2024 Operating Cash Flow</td>
+                [cite_start]<td>62,442 [cite: 40]</td>
+            </tr>
+            <tr>
+                <td>2025 Dividends Paid</td>
+                [cite_start]<td>-9,949 [cite: 40]</td>
+            </tr>
+            <tr>
+                <td>2025 Share Buybacks</td>
+                [cite_start]<td class="highlight-green">-10,010 [cite: 40]</td>
+            </tr>
+        </table>
+
+        <a href="#" class="model-link" style="border-color: rgba(16, 185, 129, 0.3);">
+            <div class="model-icon" style="background: #27c93f;"></div>
+            execute_dcf_valuation.py
+        </a>
+    </div>
+
+</div>
+
+<script>
+    const canvas = document.getElementById("dataNetwork");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particlesArray = [];
+    const numberOfParticles = 80;
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2 + 1;
+            this.speedX = Math.random() * 0.8 - 0.4;
+            this.speedY = Math.random() * 0.8 - 0.4;
+        }
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+            if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+        }
+        draw() {
+            ctx.fillStyle = 'rgba(16, 185, 129, 0.9)'; 
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    function init() {
+        particlesArray = [];
+        for (let i = 0; i < numberOfParticles; i++) {
+            particlesArray.push(new Particle());
+        }
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < particlesArray.length; i++) {
+            particlesArray[i].update();
+            particlesArray[i].draw();
+            for (let j = i; j < particlesArray.length; j++) {
+                const dx = particlesArray[i].x - particlesArray[j].x;
+                const dy = particlesArray[i].y - particlesArray[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                if (distance < 140) { 
+                    ctx.beginPath();
+                    ctx.strokeStyle = `rgba(56, 189, 248, ${0.8 - distance/140})`;
+                    ctx.lineWidth = 1.2; 
+                    ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
+                    ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
+                    ctx.stroke();
+                }
+            }
+        }
+        requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        init();
+    });
+
+    init();
+    animate();
+</script>
+
+</body>
+</html>
