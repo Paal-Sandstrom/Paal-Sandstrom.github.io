@@ -5,22 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pål Sandström - Portfolio</title>
     <style>
-        /* Basic clean styling */
+        /* Dark Mode Styling */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
-            color: #333;
+            color: #e2e8f0; /* Off-white text */
+            background-color: #0f172a; /* Deep dark blue background */
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f9f9f9;
         }
         .container {
-            background-color: #fff;
+            background-color: #1e293b; /* Slightly lighter card background */
             padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
             text-align: center;
+            border: 1px solid #334155;
         }
         /* Profile Image */
         .profile-img {
@@ -28,68 +29,88 @@
             height: 150px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid #0056b3;
+            border: 3px solid #10b981; /* Finance green border */
             margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
         }
         h1 {
-            color: #2c3e50;
+            color: #f8fafc; /* Crisp white for the name */
             margin-bottom: 5px;
+            letter-spacing: 0.5px;
         }
         .subtitle {
             font-size: 1.2em;
-            color: #7f8c8d;
-            margin-bottom: 20px;
+            color: #94a3b8; /* Slate gray */
+            margin-bottom: 25px;
         }
         .bio {
             text-align: left;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
+            font-size: 1.05em;
+            color: #cbd5e1;
         }
         /* Buttons */
         .button-container {
             display: flex;
             justify-content: center;
             gap: 15px;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
             flex-wrap: wrap;
         }
         .btn {
             display: inline-block;
-            padding: 10px 20px;
-            background-color: #0056b3;
-            color: #fff;
+            padding: 12px 24px;
+            background-color: #2563eb; /* Vibrant blue */
+            color: #ffffff;
             text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: background-color 0.3s;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
         }
         .btn:hover {
-            background-color: #004494;
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
         }
         .btn-secondary {
-            background-color: #28a745;
+            background-color: transparent;
+            border: 2px solid #10b981; /* Green border */
+            color: #10b981;
+            box-shadow: none;
         }
         .btn-secondary:hover {
-            background-color: #218838;
+            background-color: #10b981;
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);
         }
         /* Contact Section */
         .contact-info {
-            border-top: 1px solid #eee;
-            padding-top: 20px;
-            margin-top: 20px;
+            border-top: 1px solid #334155;
+            padding-top: 25px;
             text-align: left;
+        }
+        .contact-info h3 {
+            color: #f8fafc;
+            margin-top: 0;
         }
         .contact-info ul {
             list-style-type: none;
             padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
         }
         .contact-info li {
-            margin-bottom: 10px;
+            margin-bottom: 0;
         }
         .contact-info a {
-            color: #0056b3;
+            color: #38bdf8; /* Light sky blue for links */
             text-decoration: none;
+            transition: color 0.3s;
         }
         .contact-info a:hover {
+            color: #7dd3fc;
             text-decoration: underline;
         }
     </style>
@@ -103,8 +124,8 @@
     <p class="subtitle">Economics Student at Lund University</p>
 
     <div class="bio">
-        <p>Hello, I'm Pål. I am a 20-year-old Economics and Business student at Lund University specializing in International Business.</p>
-        <p>My biggest interest lies in publicly traded securities, where I do a good amount of research on both stocks and specific corporate bonds. Recently, I've become very fascinated with the Japanese market so my research on niche Japanese door handle manufacturers is available here. Aside from that, I am a big fan of the Austrians (von Mises and Hayek, not the painter), and I'm hoping to land a great job before the AI singularity wipes us all out.</p>
+        <p>ello, I'm Pål. I am a 20-year-old Economics and Business student at Lund University specializing in International Business. </p>
+        <p>My biggest interest lies in publicly traded securities, where I do a good amount of research on both stocks and specific corporate bonds. Recently, I've become very fascinated with the Japanese market so my research on niche Japanese door handle manufacturers is available here. Aside from that, I am a big fan of the Austrians (von Mises and Hayek, not the painter), and I'm hoping to land a great job before the AI singularity wipes us all out.</p></p>
     </div>
 
     <div class="button-container">
@@ -116,9 +137,9 @@
         <h3>Let's Connect</h3>
         <ul>
             <li><strong>Email:</strong> <a href="mailto:paulsanmat@gmail.com">paulsanmat@gmail.com</a></li>
-            <li><strong>Phone:</strong> +46 72 233 2622 </li>
+            <li><strong>Phone:</strong> +46 72 233 2622</li>
             <li><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/pål-sandström" target="_blank">linkedin.com/in/pål-sandström</a></li>
-            <li><strong>Location:</strong> Lund, Sweden </li>
+            <li><strong>Location:</strong> Lund, Sweden</li>
         </ul>
     </div>
 </div>
