@@ -10,9 +10,9 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #e2e8f0; 
-            background-color: #050505; /* Deepest black/grey */
+            background-color: #050505; 
             margin: 0;
-            padding: 40px 20px;
+            padding: 20px; /* Reduced padding for less empty space */
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -28,28 +28,28 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            opacity: 0.8; /* Increased visibility */
+            opacity: 0.8; 
         }
 
-        /* Bento Grid Layout */
+        /* Bento Grid Layout - Expanded for bigger boxes */
         .bento-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
-            max-width: 1000px;
+            max-width: 1150px; /* Made grid wider to use up more screen real estate */
             width: 100%;
             z-index: 1;
         }
 
         /* Individual Glass Panels */
         .bento-panel {
-            background-color: rgba(20, 25, 35, 0.6);
+            background-color: rgba(20, 25, 35, 0.7);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            padding: 35px; /* Slightly larger padding for breathing room inside */
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.6);
             transition: transform 0.3s ease, border-color 0.3s ease;
         }
         .bento-panel:hover {
@@ -59,73 +59,117 @@
 
         /* Grid Spanning */
         .panel-profile { grid-column: span 1; text-align: center; }
-        .panel-bio { grid-column: span 2; }
-        .panel-terminal { grid-column: span 2; background-color: rgba(10, 10, 15, 0.85); border-left: 4px solid #10b981; }
+        .panel-bio { grid-column: span 2; display: flex; flex-direction: column; justify-content: center;}
+        
+        /* Terminal Styling */
+        .panel-terminal { 
+            grid-column: span 2; 
+            background-color: rgba(10, 10, 15, 0.9); 
+            border-left: 4px solid #10b981; 
+            min-height: 250px; /* Made taller to fit CV info */
+            display: flex;
+            flex-direction: column;
+        }
         .panel-links { grid-column: span 1; display: flex; flex-direction: column; gap: 15px; justify-content: center;}
 
         /* Mobile Responsiveness */
-        @media (max-width: 800px) {
+        @media (max-width: 900px) {
             .bento-grid { grid-template-columns: 1fr; }
             .panel-profile, .panel-bio, .panel-terminal, .panel-links { grid-column: span 1; }
         }
 
         /* Profile Elements */
         .profile-img {
-            width: 130px;
-            height: 130px;
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid #10b981; 
             margin-bottom: 15px;
             box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
         }
-        h1 { margin: 0 0 5px 0; font-size: 1.8em; color: #f8fafc; }
-        .subtitle { color: #94a3b8; font-size: 0.95em; margin-top: 0; }
+        h1 { margin: 0 0 5px 0; font-size: 2em; color: #f8fafc; }
+        .subtitle { color: #94a3b8; font-size: 1em; margin-top: 0; }
 
-        /* Typography */
-        p { color: #cbd5e1; font-size: 1.05em; margin-bottom: 15px; }
+        p { color: #cbd5e1; font-size: 1.1em; margin-bottom: 15px; }
         
-        /* Terminal Effect */
+        /* Interactive Terminal Specifics */
         .terminal-header {
             display: flex;
-            gap: 8px;
-            margin-bottom: 15px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
         }
+        .terminal-dots { display: flex; gap: 8px; }
         .dot { width: 12px; height: 12px; border-radius: 50%; }
         .dot-red { background-color: #ff5f56; }
         .dot-yellow { background-color: #ffbd2e; }
         .dot-green { background-color: #27c93f; }
-        .terminal-text {
-            font-family: 'Courier New', Courier, monospace;
-            color: #38bdf8;
-            font-size: 0.95em;
-            margin: 5px 0;
-            min-height: 22px; /* Prevents layout jumping */
+        
+        /* Terminal Controls */
+        .terminal-nav {
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
+        .terminal-nav button {
+            background: none;
+            border: 1px solid #38bdf8;
+            color: #38bdf8;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+            padding: 2px 10px;
+            transition: all 0.2s;
+        }
+        .terminal-nav button:hover {
+            background: #38bdf8;
+            color: #000;
+        }
+        .slide-indicator { color: #64748b; font-family: monospace; font-size: 0.9em; }
+
+        /* Terminal Text output */
+        .terminal-body { flex-grow: 1; display: flex; flex-direction: column; }
+        .terminal-cmd {
+            font-family: 'Courier New', Courier, monospace;
+            color: #38bdf8; /* Blue command */
+            font-size: 1.05em;
+            margin-bottom: 15px;
+            min-height: 24px;
+        }
+        .terminal-out {
+            font-family: 'Courier New', Courier, monospace;
+            color: #e2e8f0;
+            font-size: 1em;
+            opacity: 0; /* Hidden until command finishes typing */
+            transition: opacity 0.3s ease;
+        }
+        .terminal-out .highlight { color: #10b981; font-weight: bold; }
+        .terminal-out ul { margin-top: 5px; padding-left: 20px; color: #94a3b8; }
+        .terminal-out li { margin-bottom: 4px; }
 
         /* Buttons */
         .btn {
             display: block;
             text-align: center;
-            padding: 14px 20px;
+            padding: 16px 20px;
             background: linear-gradient(135deg, #2563eb, #1d4ed8);
             color: #ffffff;
             text-decoration: none;
             border-radius: 8px;
             font-weight: bold;
             transition: all 0.3s ease;
+            font-size: 1.1em;
         }
         .btn:hover { box-shadow: 0 0 15px rgba(37, 99, 235, 0.5); transform: scale(1.02); }
-        .btn-secondary {
-            background: transparent;
-            border: 2px solid #10b981;
-            color: #10b981;
-        }
+        .btn-secondary { background: transparent; border: 2px solid #10b981; color: #10b981; }
         .btn-secondary:hover { background: rgba(16, 185, 129, 0.1); box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
 
         /* Social Links */
-        .social-links { margin-top: 20px; }
-        .social-links a { color: #94a3b8; text-decoration: none; display: block; margin: 8px 0; transition: color 0.3s; }
+        .social-links { margin-top: 25px; }
+        .social-links a { color: #94a3b8; text-decoration: none; display: block; margin: 10px 0; font-size: 1.05em; transition: color 0.3s; }
         .social-links a:hover { color: #10b981; }
     </style>
 </head>
@@ -153,52 +197,113 @@
         <p>Aside from that, I am a big fan of the Austrians (von Mises and Hayek, not the painter), and I'm hoping to land a great job before the AI singularity wipes us all out.</p>
     </div>
 
-    <div class="bento-panel panel-terminal">
-        <div class="terminal-header">
-            <div class="dot dot-red"></div>
-            <div class="dot dot-yellow"></div>
-            <div class="dot dot-green"></div>
-        </div>
-        <div class="terminal-text" id="typewriter1"></div>
-        <div class="terminal-text" id="typewriter2"></div>
-        <div class="terminal-text" id="typewriter3" style="color: #10b981;"></div>
+    <div class="bento-panel panel-links">
+        <a href="resume.html" class="btn">View Resume Page</a>
+        <a href="stock-research.html" class="btn btn-secondary">Stock Research</a>
     </div>
 
-    <div class="bento-panel panel-links">
-        <a href="resume.html" class="btn">View Resume</a>
-        <a href="stock-research.html" class="btn btn-secondary">Stock Research</a>
+    <div class="bento-panel panel-terminal">
+        <div class="terminal-header">
+            <div class="terminal-dots">
+                <div class="dot dot-red"></div>
+                <div class="dot dot-yellow"></div>
+                <div class="dot dot-green"></div>
+            </div>
+            <div class="terminal-nav">
+                <button id="prevBtn">&lt; Prev</button>
+                <span class="slide-indicator" id="slideIndicator">1 / 6</span>
+                <button id="nextBtn">Next &gt;</button>
+            </div>
+        </div>
+        
+        <div class="terminal-body">
+            <div class="terminal-cmd" id="termCommand"></div>
+            <div class="terminal-out" id="termOutput"></div>
+        </div>
     </div>
 
 </div>
 
 <script>
-    // 1. Typewriter Effect for the Terminal Panel
-    const line1 = "> import pandas as pd; import numpy as np";
-    const line2 = "> load_skills(['Data Analysis', 'Financial Modeling', 'Excel'])";
-    const line3 = "> Status: Ready to build and analyze.";
-    
-    let i = 0, j = 0, k = 0;
-    
-    function typeWriter() {
-        if (i < line1.length) {
-            document.getElementById("typewriter1").innerHTML += line1.charAt(i);
-            i++;
-            setTimeout(typeWriter, 30);
-        } else if (j < line2.length) {
-            document.getElementById("typewriter2").innerHTML += line2.charAt(j);
-            j++;
-            setTimeout(typeWriter, 30);
-        } else if (k < line3.length) {
-            document.getElementById("typewriter3").innerHTML += line3.charAt(k);
-            k++;
-            setTimeout(typeWriter, 30);
+    // --- 1. INTERACTIVE TERMINAL LOGIC ---
+    // Here is the database of your CV information
+    const cvData = [
+        {
+            cmd: "> fetch --education 'University'",
+            out: "<span class='highlight'>Lund University</span><br>BSc Business and Economics (Int. Business)<br>Sept 2024 - Jun 2027<br>Focus: Accounting, Law, Statistics."
+        },
+        {
+            cmd: "> fetch --education 'High School'",
+            out: "<span class='highlight'>Carmel High School, USA</span><br>Honors Diploma<br>Sept 2020 - May 2024"
+        },
+        {
+            cmd: "> execute startup.sh --project 'Silkroad'",
+            out: "<span class='highlight'>Founder @ Silkroad (E-commerce)</span><br>Sept 2024 - Mar 2025<br><ul><li>Designed and managed e-commerce platform</li><li>Ensured corporate/tax compliance in Sweden</li><li>Created digital marketing materials</li></ul>"
+        },
+        {
+            cmd: "> load_experience --role 'Lifeguard'",
+            out: "<span class='highlight'>Aquatic Management of Indianapolis</span><br>May 2023 - Sept 2023<br><ul><li>Managed hazardous situations & facility safety</li><li>Calculated and adjusted pool pH/chlorine levels</li></ul>"
+        },
+        {
+            cmd: "> import skills",
+            out: "<span class='highlight'>Data & Tech:</span> Python (Pandas, NumPy), Excel (Advanced Formulas, Modeling)<br><br><span class='highlight'>Languages:</span> Swedish (Native), English (Native-level), German (Basic)"
+        },
+        {
+            cmd: "> check_certifications",
+            out: "<span class='highlight'>Driver's License:</span> Class B<br>Status: Valid & Ready to drive to the office."
         }
+    ];
+
+    let currentSlide = 0;
+    let typingTimeout;
+
+    function renderTerminalSlide(index) {
+        clearTimeout(typingTimeout);
+        const cmdEl = document.getElementById('termCommand');
+        const outEl = document.getElementById('termOutput');
+        
+        // Reset Terminal
+        cmdEl.innerHTML = '';
+        outEl.innerHTML = '';
+        outEl.style.opacity = 0;
+        
+        const textToType = cvData[index].cmd;
+        let charIndex = 0;
+
+        // Typewriter effect for the command line
+        function typeChar() {
+            if (charIndex < textToType.length) {
+                cmdEl.innerHTML += textToType.charAt(charIndex);
+                charIndex++;
+                typingTimeout = setTimeout(typeChar, 35);
+            } else {
+                // Command is done typing, instantly pop up the data result
+                outEl.innerHTML = cvData[index].out;
+                outEl.style.opacity = 1;
+            }
+        }
+        typeChar();
+        
+        // Update the counter at the top
+        document.getElementById('slideIndicator').innerText = `${index + 1} / ${cvData.length}`;
     }
-    // Start typing effect slightly after page loads
-    setTimeout(typeWriter, 500);
+
+    // Button Listeners
+    document.getElementById('nextBtn').addEventListener('click', () => {
+        currentSlide = (currentSlide + 1) % cvData.length;
+        renderTerminalSlide(currentSlide);
+    });
+
+    document.getElementById('prevBtn').addEventListener('click', () => {
+        currentSlide = (currentSlide - 1 + cvData.length) % cvData.length;
+        renderTerminalSlide(currentSlide);
+    });
+
+    // Start terminal on load
+    setTimeout(() => { renderTerminalSlide(0); }, 500);
 
 
-    // 2. Animated Data Network Background (Enhanced Lines, No Tilt)
+    // --- 2. ANIMATED DATA NETWORK BACKGROUND ---
     const canvas = document.getElementById("dataNetwork");
     const ctx = canvas.getContext("2d");
     canvas.width = window.innerWidth;
@@ -222,7 +327,7 @@
             if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
         }
         draw() {
-            ctx.fillStyle = 'rgba(16, 185, 129, 0.9)'; // Brighter green dots
+            ctx.fillStyle = 'rgba(16, 185, 129, 0.9)'; 
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
             ctx.fill();
@@ -245,9 +350,8 @@
                 const dx = particlesArray[i].x - particlesArray[j].x;
                 const dy = particlesArray[i].y - particlesArray[j].y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
-                if (distance < 140) { // Slightly longer connection reach
+                if (distance < 140) { 
                     ctx.beginPath();
-                    // Lines are now more opaque and slightly thicker
                     ctx.strokeStyle = `rgba(56, 189, 248, ${0.8 - distance/140})`;
                     ctx.lineWidth = 1.2; 
                     ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
