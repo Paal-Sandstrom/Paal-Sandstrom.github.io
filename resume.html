@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume - Pål Sandström</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        /* Header & Toggle Button */
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        h1 { margin: 0; color: #2c3e50; }
+        .contact-info p { margin: 2px 0; font-size: 0.9em; }
+        
+        .toggle-btn {
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .toggle-btn:hover { background-color: #004494; }
+
+        /* Section Styling */
+        h2 { color: #0056b3; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 30px; }
+        .job { margin-bottom: 20px; }
+        .job-header { display: flex; justify-content: space-between; align-items: baseline; }
+        .job-title { font-weight: bold; font-size: 1.1em; }
+        .date { color: #666; font-size: 0.9em; }
+        ul { margin-top: 5px; padding-left: 20px; }
+
+        /* Language Classes - Swedish is hidden by default */
+        .lang-sv { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-top">
+        <div>
+            [cite_start]<h1>Pål Sandström [cite: 1]</h1>
+            <div class="contact-info">
+                [cite_start]<p>📍 Lund, Sweden [cite: 8, 13]</p>
+                [cite_start]<p>📧 paulsanmat@gmail.com [cite: 7]</p>
+                [cite_start]<p>📞 +46 72 233 2622 [cite: 6]</p>
+            </div>
+        </div>
+        <button class="toggle-btn" onclick="toggleLanguage()">🇸🇪 Byt till Svenska</button>
+    </div>
+
+    <div class="lang-en">
+        <h2>Profile</h2>
+        <p>Economics student at Lund University majoring in International Business. I combine academic knowledge with practical experience from entrepreneurship and international work.</p>
+    </div>
+    <div class="lang-sv">
+        [cite_start]<h2>Profil [cite: 2]</h2>
+        <p>Ekonomistudent vid Lunds universitet med inriktning International Business. [cite_start]Jag kombinerar akademiska kunskaper med praktisk erfarenhet av egenföretagande och internationellt arbete. [cite: 3]</p>
+    </div>
+
+    <div class="lang-en"><h2>Experience</h2></div>
+    [cite_start]<div class="lang-sv"><h2>Arbetslivserfarenhet [cite: 12]</h2></div>
+
+    <div class="job">
+        <div class="job-header">
+            <div class="lang-en"><span class="job-title">E-commerce Business Owner</span> | Lund, Sweden</div>
+            <div class="lang-sv"><span class="job-title">Egenföretagare i E-handel</span> | [cite_start]Lund, Sverige [cite: 13]</div>
+            
+            <div class="lang-en"><span class="date">September 2024 - March 2025</span></div>
+            [cite_start]<div class="lang-sv"><span class="date">September 2024 - Mars 2025 [cite: 14]</span></div>
+        </div>
+        <div class="lang-en">
+            <ul>
+                <li>Founded the partnership "Silkroad" selling jewelry and clothing.</li>
+                <li>Designed and continuously improved the e-commerce website.</li>
+                <li>Ensured the business strictly followed current tax and corporate regulations in Sweden.</li>
+                <li>Created marketing materials and managed digital advertising campaigns.</li>
+            </ul>
+        </div>
+        <div class="lang-sv">
+            <ul>
+                [cite_start]<li>Grundade handelsbolaget "Silkroad" som sålde smycken och kläder [cite: 15]</li>
+                [cite_start]<li>Designade och förbättrade hemsidan [cite: 15]</li>
+                [cite_start]<li>Säkerställde att verksamheten följde gällande skatte- och företagsregler i Sverige [cite: 16]</li>
+                [cite_start]<li>Skapade marknadsföringsmaterial och digital reklam [cite: 17]</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="job">
+        <div class="job-header">
+            <div class="lang-en"><span class="job-title">Lifeguard</span> | Aquatic Management of Indianapolis, USA</div>
+            <div class="lang-sv"><span class="job-title">Livräddare</span> | [cite_start]Aquatic Management of Indianapolis, USA [cite: 18]</div>
+            <div class="lang-en"><span class="date">May 2023 - September 2023</span></div>
+            [cite_start]<div class="lang-sv"><span class="date">Maj - September, 2023 [cite: 18]</span></div>
+        </div>
+        <div class="lang-en">
+            <ul>
+                <li>Managed and resolved hazardous situations within the pool area.</li>
+                <li>Maintained cleanliness and safety standards of the facility.</li>
+                <li>Measured and adjusted chlorine and pH levels in the pool.</li>
+            </ul>
+        </div>
+        <div class="lang-sv">
+            <ul>
+                [cite_start]<li>Tog hand om farliga situationer inom poolområdet [cite: 19]</li>
+                [cite_start]<li>Höll poolområdet rent [cite: 20]</li>
+                [cite_start]<li>Mätte och justerade klor och pH-nivån i poolen [cite: 21]</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="lang-en"><h2>Education</h2></div>
+    [cite_start]<div class="lang-sv"><h2>Utbildning [cite: 26]</h2></div>
+
+    <div class="job">
+        <div class="job-header">
+            <div class="lang-en"><span class="job-title">BSc in Business and Economics (International Business)</span></div>
+            [cite_start]<div class="lang-sv"><span class="job-title">Ekonomie Kandidatprogram, inriktning International Business [cite: 27]</span></div>
+        </div>
+        <div class="lang-en">Lund University | <em>September 2024 - June 2027</em><br>Relevant coursework: Accounting, Law, Statistics, Management Control.</div>
+        [cite_start]<div class="lang-sv">Lunds Universitet [cite: 28] | [cite_start]<em>September 2024 - Juni 2027 [cite: 29][cite_start]</em><br>Relevanta kurser: redovisning, juridik, statistik, ekonomistyrning [cite: 30]</div>
+    </div>
+
+    <div class="job">
+        <div class="job-header">
+            <div class="lang-en"><span class="job-title">High School with "Honors Diploma"</span></div>
+            [cite_start]<div class="lang-sv"><span class="job-title">High School(Gymnaset) med "Honors Diploma" [cite: 31]</span></div>
+        </div>
+        <div class="lang-en">Carmel High School, USA | <em>September 2020 - May 2024</em></div>
+        [cite_start]<div class="lang-sv">Carmel High School, USA [cite: 32] | [cite_start]<em>September 2020 - Maj 2024 [cite: 33]</em></div>
+    </div>
+
+    <div class="lang-en"><h2>Skills & Languages</h2></div>
+    [cite_start]<div class="lang-sv"><h2>Övriga Meriter & Språk [cite: 10, 34]</h2></div>
+    
+    <div class="lang-en">
+        <ul>
+            <li><strong>IT & Data:</strong> Python (Pandas, NumPy - Good), Excel (Tables, Formulas - Good)</li>
+            <li><strong>Languages:</strong> Swedish (Native), English (Native-level), German (Basic)</li>
+            <li><strong>Other:</strong> Class B Driver's License</li>
+        </ul>
+    </div>
+    <div class="lang-sv">
+        <ul>
+            [cite_start]<li><strong>IT- och systemkunskaper: [cite: 35][cite_start]</strong> Python - Goda kunskaper (Pandas, NumPy) [cite: 36][cite_start], Excel - Goda kunskaper (tabeller, formler) [cite: 36]</li>
+            [cite_start]<li><strong>Språk: [cite: 10][cite_start]</strong> Svenska - Modersmål, Engelska - Modersmål, Tyska - Grundläggande [cite: 11]</li>
+            [cite_start]<li><strong>Körkort: [cite: 24][cite_start]</strong> B [cite: 25]</li>
+        </ul>
+    </div>
+    
+    <div style="margin-top: 30px; text-align: center;">
+        <a href="index.html" style="color: #0056b3; text-decoration: none; font-weight: bold;">← Back to Home</a>
+    </div>
+</div>
+
+<script>
+    let currentLang = 'en'; // Default language
+
+    function toggleLanguage() {
+        const enElements = document.querySelectorAll('.lang-en');
+        const svElements = document.querySelectorAll('.lang-sv');
+        const btn = document.querySelector('.toggle-btn');
+
+        if (currentLang === 'en') {
+            // Switch to Swedish
+            enElements.forEach(el => el.style.display = 'none');
+            svElements.forEach(el => el.style.display = 'block');
+            btn.innerHTML = '🇬🇧 Switch to English';
+            currentLang = 'sv';
+        } else {
+            // Switch to English
+            enElements.forEach(el => el.style.display = 'block');
+            svElements.forEach(el => el.style.display = 'none');
+            btn.innerHTML = '🇸🇪 Byt till Svenska';
+            currentLang = 'en';
+        }
+    }
+</script>
+
+</body>
+</html>
