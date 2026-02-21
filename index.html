@@ -5,90 +5,137 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pål Sandström - Portfolio</title>
     <style>
-        /* Dark Mode Styling */
+        /* Dark Mode Styling with Reset */
+        * {
+            box-sizing: border-box;
+        }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
-            color: #e2e8f0; /* Off-white text */
-            background-color: #0f172a; /* Deep dark blue background */
-            max-width: 800px;
-            margin: 0 auto;
+            color: #e2e8f0; 
+            background-color: #0f172a; 
+            margin: 0;
             padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
         }
+
+        /* The Animated Background Canvas */
+        #dataNetwork {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        /* 3D Glassmorphism Container */
         .container {
-            background-color: #1e293b; /* Slightly lighter card background */
+            background-color: rgba(30, 41, 59, 0.7); /* Semi-transparent */
+            backdrop-filter: blur(12px); /* Frosted glass effect */
+            -webkit-backdrop-filter: blur(12px);
             padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
             text-align: center;
-            border: 1px solid #334155;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 800px;
+            width: 100%;
+            
+            /* Prepare for 3D tilt */
+            transform-style: preserve-3d;
+            transform: perspective(1000px);
+            transition: transform 0.1s ease-out;
         }
-        /* Profile Image */
+
+        /* Profile Image with Glowing Pulse */
         .profile-img {
             width: 150px;
             height: 150px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid #10b981; /* Finance green border */
+            border: 3px solid #10b981; 
             margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+            animation: pulseGlow 3s infinite alternate;
+            transform: translateZ(30px); /* Pops out in 3D */
         }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 10px rgba(16, 185, 129, 0.2); }
+            100% { box-shadow: 0 0 25px rgba(16, 185, 129, 0.8); }
+        }
+
         h1 {
-            color: #f8fafc; /* Crisp white for the name */
+            color: #f8fafc; 
             margin-bottom: 5px;
             letter-spacing: 0.5px;
+            transform: translateZ(20px);
         }
         .subtitle {
             font-size: 1.2em;
-            color: #94a3b8; /* Slate gray */
+            color: #94a3b8; 
             margin-bottom: 25px;
+            transform: translateZ(15px);
         }
         .bio {
             text-align: left;
             margin-bottom: 35px;
             font-size: 1.05em;
             color: #cbd5e1;
+            transform: translateZ(10px);
         }
-        /* Buttons */
+
+        /* Buttons with Neon Hover */
         .button-container {
             display: flex;
             justify-content: center;
             gap: 15px;
             margin-bottom: 35px;
             flex-wrap: wrap;
+            transform: translateZ(25px);
         }
         .btn {
             display: inline-block;
             padding: 12px 24px;
-            background-color: #2563eb; /* Vibrant blue */
+            background-color: #2563eb; 
             color: #ffffff;
             text-decoration: none;
             border-radius: 6px;
             font-weight: 600;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+            position: relative;
+            overflow: hidden;
         }
         .btn:hover {
             background-color: #1d4ed8;
             transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.6);
         }
         .btn-secondary {
             background-color: transparent;
-            border: 2px solid #10b981; /* Green border */
+            border: 2px solid #10b981; 
             color: #10b981;
             box-shadow: none;
         }
         .btn-secondary:hover {
             background-color: #10b981;
             color: #ffffff;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.5);
         }
+
         /* Contact Section */
         .contact-info {
-            border-top: 1px solid #334155;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             padding-top: 25px;
             text-align: left;
+            transform: translateZ(10px);
         }
         .contact-info h3 {
             color: #f8fafc;
@@ -105,27 +152,29 @@
             margin-bottom: 0;
         }
         .contact-info a {
-            color: #38bdf8; /* Light sky blue for links */
+            color: #38bdf8; 
             text-decoration: none;
-            transition: color 0.3s;
+            transition: color 0.3s, text-shadow 0.3s;
         }
         .contact-info a:hover {
             color: #7dd3fc;
-            text-decoration: underline;
+            text-shadow: 0 0 8px rgba(125, 211, 252, 0.6);
         }
     </style>
 </head>
 <body>
 
-<div class="container">
+<canvas id="dataNetwork"></canvas>
+
+<div class="container" id="tiltCard">
     <img src="images/profile.jpg" alt="Pål Sandström" class="profile-img">
 
     <h1>Pål Sandström</h1>
     <p class="subtitle">Economics Student at Lund University</p>
 
     <div class="bio">
-        <p>ello, I'm Pål. I am a 20-year-old Economics and Business student at Lund University specializing in International Business. </p>
-        <p>My biggest interest lies in publicly traded securities, where I do a good amount of research on both stocks and specific corporate bonds. Recently, I've become very fascinated with the Japanese market so my research on niche Japanese door handle manufacturers is available here. Aside from that, I am a big fan of the Austrians (von Mises and Hayek, not the painter), and I'm hoping to land a great job before the AI singularity wipes us all out.</p></p>
+        <p>Hello, I'm Pål. I am a 20-year-old Economics and Business student at Lund University specializing in International Business. </p>
+        <p>My biggest interest lies in publicly traded securities, where I do a good amount of research on both stocks and specific corporate bonds. Recently, I've become very fascinated with the Japanese market so my research on niche Japanese door handle manufacturers is available here. Aside from that, I am a big fan of the Austrians (von Mises and Hayek, not the painter), and I'm hoping to land a great job before the AI singularity wipes us all out.</p>
     </div>
 
     <div class="button-container">
@@ -143,6 +192,86 @@
         </ul>
     </div>
 </div>
+
+<script>
+    // 1. 3D Tilt Effect on the Card
+    const card = document.getElementById('tiltCard');
+    document.addEventListener('mousemove', (e) => {
+        let xAxis = (window.innerWidth / 2 - e.pageX) / 40;
+        let yAxis = (window.innerHeight / 2 - e.pageY) / 40;
+        card.style.transform = `perspective(1000px) rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+    });
+
+    // 2. Animated Data Network Background
+    const canvas = document.getElementById("dataNetwork");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particlesArray = [];
+    const numberOfParticles = 80;
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2 + 1;
+            this.speedX = Math.random() * 1 - 0.5;
+            this.speedY = Math.random() * 1 - 0.5;
+        }
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            if (this.size > 0.2) this.size -= 0.01;
+            if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+            if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+        }
+        draw() {
+            ctx.fillStyle = 'rgba(16, 185, 129, 0.8)';
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    function init() {
+        particlesArray = [];
+        for (let i = 0; i < numberOfParticles; i++) {
+            particlesArray.push(new Particle());
+        }
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < particlesArray.length; i++) {
+            particlesArray[i].update();
+            particlesArray[i].draw();
+            for (let j = i; j < particlesArray.length; j++) {
+                const dx = particlesArray[i].x - particlesArray[j].x;
+                const dy = particlesArray[i].y - particlesArray[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                if (distance < 120) {
+                    ctx.beginPath();
+                    ctx.strokeStyle = `rgba(56, 189, 248, ${1 - distance/120})`;
+                    ctx.lineWidth = 0.5;
+                    ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
+                    ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
+                    ctx.stroke();
+                }
+            }
+        }
+        requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        init();
+    });
+
+    init();
+    animate();
+</script>
 
 </body>
 </html>
