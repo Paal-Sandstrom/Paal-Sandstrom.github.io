@@ -17,6 +17,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            overflow-x: hidden;
         }
 
         /* Animated Background Canvas */
@@ -37,7 +38,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             padding-bottom: 20px;
             border-bottom: 2px solid rgba(16, 185, 129, 0.3);
             z-index: 1;
@@ -55,48 +56,110 @@
         }
         .btn-back:hover { background: #10b981; color: #050505; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
 
-        /* Bento Grid Layout for Research */
-        .bento-grid {
+        /* Stock Grid (The Bubbles) */
+        .stock-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 25px;
             max-width: 1200px;
             width: 100%;
             z-index: 1;
         }
 
-        /* Individual Glass Panels */
-        .bento-panel {
-            background-color: rgba(20, 25, 35, 0.75);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+        /* Individual Stock Card */
+        .stock-card {
+            background-color: rgba(20, 25, 35, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+        }
+        .stock-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: #38bdf8;
+            box-shadow: 0 15px 30px rgba(56, 189, 248, 0.2);
+            background-color: rgba(30, 35, 45, 0.8);
+        }
+
+        .stock-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .stock-name { color: #f8fafc; font-size: 1.4em; font-weight: bold; margin: 0; }
+        .stock-ticker { background: #2563eb; color: white; padding: 3px 8px; border-radius: 6px; font-size: 0.75em; font-family: monospace; }
+        
+        .stock-info { font-size: 0.9em; color: #94a3b8; margin: 2px 0; display: flex; align-items: center; gap: 8px; }
+        .stock-info span { color: #cbd5e1; }
+
+        /* Modal Overlay (The Pop-up) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* Modal Content Box */
+        .modal-content {
+            background-color: #0f172a;
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 850px;
+            max-height: 85vh;
+            overflow-y: auto;
             padding: 40px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-            transition: transform 0.3s ease, border-color 0.3s ease;
+            position: relative;
+            transform: translateY(30px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
         }
-        .bento-panel:hover {
-            transform: translateY(-5px);
-            border-color: rgba(56, 189, 248, 0.4);
-        }
-        .panel-full { grid-column: span 2; }
-
-        @media (max-width: 900px) {
-            .bento-grid { grid-template-columns: 1fr; }
-            .panel-full { grid-column: span 1; }
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
         }
 
-        /* Typography & Headers inside Panels */
-        h2 { color: #f8fafc; margin-top: 0; margin-bottom: 5px; font-size: 1.8em; display: flex; justify-content: space-between; align-items: center; }
-        .ticker { background: #2563eb; color: white; padding: 4px 10px; border-radius: 6px; font-size: 0.55em; letter-spacing: 1px; vertical-align: middle;}
-        h3 { color: #38bdf8; font-size: 1.2em; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; margin-top: 25px;}
-        p { color: #cbd5e1; font-size: 1.05em; margin-bottom: 15px; }
-        ul { color: #94a3b8; padding-left: 20px; }
-        li { margin-bottom: 8px; }
-        strong { color: #f8fafc; }
+        /* Close Button */
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 2em;
+            cursor: pointer;
+            transition: color 0.2s;
+            line-height: 1;
+        }
+        .close-btn:hover { color: #ff5f56; }
 
-        /* Financial Tables (Bloomberg Style) */
+        /* Modal Inner Typography */
+        .modal-content h2 { color: #f8fafc; margin-top: 0; font-size: 2em; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;}
+        .modal-content h3 { color: #38bdf8; font-size: 1.3em; margin-top: 25px; }
+        .modal-content p { color: #cbd5e1; font-size: 1.1em; margin-bottom: 15px; }
+        .modal-content ul { color: #94a3b8; padding-left: 20px; font-size: 1.05em;}
+        .modal-content li { margin-bottom: 8px; }
+        .modal-content strong { color: #f8fafc; }
+
+        /* Financial Tables in Modal */
         .fin-table {
             width: 100%;
             border-collapse: collapse;
@@ -114,25 +177,14 @@
         }
         .fin-table th { background: rgba(37, 99, 235, 0.2); color: #38bdf8; text-align: left; font-family: 'Segoe UI', sans-serif; font-size: 0.9em; text-transform: uppercase;}
         .fin-table td:first-child { text-align: left; color: #94a3b8; font-family: 'Segoe UI', sans-serif; font-weight: bold;}
-        .fin-table .highlight-green { color: #10b981; font-weight: bold; }
+        .highlight-green { color: #10b981; font-weight: bold; }
 
-        /* Fake Code/Model Link */
-        .model-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 20px;
-            padding: 12px 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #f8fafc;
-            text-decoration: none;
-            border-radius: 8px;
-            font-family: monospace;
-            transition: all 0.2s;
-        }
-        .model-link:hover { background: rgba(56, 189, 248, 0.15); border-color: #38bdf8; }
-        .model-icon { width: 12px; height: 12px; border-radius: 50%; background: #ffbd2e; }
+        /* Scrollbar for Modal */
+        .modal-content::-webkit-scrollbar { width: 8px; }
+        .modal-content::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 4px;}
+        .modal-content::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.4); border-radius: 4px; }
+        .modal-content::-webkit-scrollbar-thumb:hover { background: rgba(56, 189, 248, 0.8); }
+
     </style>
 </head>
 <body>
@@ -140,99 +192,186 @@
 <canvas id="dataNetwork"></canvas>
 
 <div class="nav-header">
-    <h1>Equity Research</h1>
+    <h1>Equity Research Hub</h1>
     <a href="index.html" class="btn-back">← Back to Hub</a>
 </div>
 
-<div class="bento-grid">
+<div class="stock-grid" id="stockGrid"></div>
 
-    <div class="bento-panel panel-full" style="padding: 30px; text-align: center;">
-        <p style="margin: 0; font-size: 1.2em; color: #94a3b8;">Focusing on fundamental analysis, free cash flow valuation, and mispriced operational efficiencies within the Japanese equity market.</p>
+<div class="modal-overlay" id="researchModal" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <button class="close-btn" onclick="closeModal(event)">&times;</button>
+        <div id="modalBody">
+            </div>
     </div>
-
-    <div class="bento-panel">
-        <h2>Lifedrink Company <span class="ticker">BEVERAGE</span></h2>
-        [cite_start]<p><strong>Market Cap:</strong> ¥93.5 Billion [cite: 46]</p>
-
-        <h3>Investment Thesis</h3>
-        <p>Lifedrink presents a masterclass in operational focus and radical standardization. [cite_start]Between 2010 and 2020, management ruthlessly trimmed the fat by divesting non-core businesses (including solar panels, ramen, and ice)[cite: 46].</p>
-        [cite_start]<p>Today, they strictly focus on a radically standardized production process for high-volume, low-cost beverages (water and teas)[cite: 46]. [cite_start]While competitors maintain bloated portfolios with endless variety, Lifedrink knows exactly what they are good at and sticks to what generates actual cash flow[cite: 46].</p>
-        
-        <h3>Key Drivers</h3>
-        <ul>
-            [cite_start]<li><strong>Scale & Footprint:</strong> Operating 13 factories across Japan[cite: 46], mitigating logistics costs and fuel price volatility.</li>
-            [cite_start]<li><strong>E-Commerce Growth:</strong> Strong awareness and structural growth in direct website sales and Amazon distribution[cite: 46].</li>
-            [cite_start]<li><strong>Capacity Expansion:</strong> Expanding the Gotemba facility to meet demand that currently outpaces supply[cite: 46].</li>
-        </ul>
-
-        <table class="fin-table">
-            <tr>
-                <th>Financial Snapshot (FQ2 2025)</th>
-                <th>Actual (¥M)</th>
-            </tr>
-            <tr>
-                <td>Revenue</td>
-                [cite_start]<td>12,779 [cite: 68]</td>
-            </tr>
-            <tr>
-                <td>Gross Profit</td>
-                [cite_start]<td>5,638 [cite: 68]</td>
-            </tr>
-            <tr>
-                <td>Operating Income</td>
-                [cite_start]<td class="highlight-green">1,817 [cite: 68]</td>
-            </tr>
-        </table>
-        
-        <a href="#" class="model-link">
-            <div class="model-icon"></div>
-            view_financial_model.xlsx
-        </a>
-    </div>
-
-    <div class="bento-panel">
-        <h2>Nichirei Corp <span class="ticker">TSE: 2871</span></h2>
-        [cite_start]<p><strong>Market Cap:</strong> ¥432.3 Billion [cite: 43] | [cite_start]<strong>Current Price:</strong> ¥1,722.5 [cite: 45]</p>
-
-        <h3>Investment Thesis</h3>
-        [cite_start]<p>Nichirei operates across Logistics (36.6% of revenue) and Processed Foods (41.3%)[cite: 37]. The core thesis rests on a fortress balance sheet and highly shareholder-friendly capital allocation. [cite_start]The company holds almost enough current assets to completely pay off all total liabilities[cite: 42], providing a massive margin of safety.</p>
-        [cite_start]<p>Furthermore, management has a proven track record of opportunistic share buybacks whenever operational results underwhelm[cite: 40], providing a continuous floor for the stock price and signaling deep value to investors.</p>
-
-        <h3>Valuation Output (DCF Model)</h3>
-        <ul>
-            [cite_start]<li><strong>Long-term Growth Rate:</strong> 9.0% [cite: 43]</li>
-            [cite_start]<li><strong>Discount Rate:</strong> 10.0% [cite: 43]</li>
-            [cite_start]<li><strong>Fair Value Output:</strong> Implied upside to ~¥1,864 per share[cite: 45].</li>
-        </ul>
-
-        <table class="fin-table">
-            <tr>
-                <th>Capital Allocation (FY 24-25)</th>
-                <th>Cash (¥M)</th>
-            </tr>
-            <tr>
-                <td>2024 Operating Cash Flow</td>
-                [cite_start]<td>62,442 [cite: 40]</td>
-            </tr>
-            <tr>
-                <td>2025 Dividends Paid</td>
-                [cite_start]<td>-9,949 [cite: 40]</td>
-            </tr>
-            <tr>
-                <td>2025 Share Buybacks</td>
-                [cite_start]<td class="highlight-green">-10,010 [cite: 40]</td>
-            </tr>
-        </table>
-
-        <a href="#" class="model-link" style="border-color: rgba(16, 185, 129, 0.3);">
-            <div class="model-icon" style="background: #27c93f;"></div>
-            execute_dcf_valuation.py
-        </a>
-    </div>
-
 </div>
 
 <script>
+    // --- 1. STOCK DATABASE ---
+    // This array holds all your companies. To add more, just copy a block and fill it out!
+    const stocks = [
+        {
+            id: 'nichirei',
+            name: 'Nichirei Corp',
+            ticker: '2871.T',
+            country: '🇯🇵 Japan',
+            industry: 'Food & Logistics',
+            content: `
+                <h2>Nichirei Corp <span style="font-size: 0.5em; color: #94a3b8; margin-left: 10px;">Market Cap: ¥432.3B</span></h2>
+                <h3>Investment Thesis</h3>
+                <p>Nichirei operates primarily across Logistics (36.6% of revenue) and Processed Foods (41.3%). The core thesis rests on a fortress balance sheet and highly shareholder-friendly capital allocation. The company holds almost enough current assets to completely pay off all total liabilities, providing a massive margin of safety.</p>
+                <p>Furthermore, management has a proven track record of opportunistic share buybacks whenever operational results underwhelm, providing a continuous floor for the stock price and signaling deep value to investors.</p>
+                
+                <h3>Valuation Output (DCF Model)</h3>
+                <ul>
+                    <li><strong>Long-term Growth Rate:</strong> 9.0%</li>
+                    <li><strong>Discount Rate:</strong> 10.0%</li>
+                    <li><strong>Fair Value Output:</strong> Implied upside to ~¥1,864 per share.</li>
+                </ul>
+
+                <table class="fin-table">
+                    <tr><th>Capital Allocation (FY 24-25)</th><th>Cash (¥M)</th></tr>
+                    <tr><td>2024 Operating Cash Flow</td><td>62,442</td></tr>
+                    <tr><td>2025 Dividends Paid</td><td>-9,949</td></tr>
+                    <tr><td>2025 Share Buybacks</td><td class="highlight-green">-10,010</td></tr>
+                </table>
+            `
+        },
+        {
+            id: 'lifedrink',
+            name: 'Lifedrink Co.',
+            ticker: '2585.T',
+            country: '🇯🇵 Japan',
+            industry: 'Beverages',
+            content: `
+                <h2>Lifedrink Company <span style="font-size: 0.5em; color: #94a3b8; margin-left: 10px;">Market Cap: ¥93.5B</span></h2>
+                <h3>Investment Thesis</h3>
+                <p>Lifedrink presents a masterclass in operational focus and radical standardization. Between 2010 and 2020, management ruthlessly trimmed the fat by divesting non-core businesses (including solar panels, ramen, and ice).</p>
+                <p>Today, they strictly focus on a radically standardized production process for high-volume, low-cost beverages (water and teas). While competitors maintain bloated portfolios with endless variety, Lifedrink knows exactly what they are good at and sticks to what generates actual cash flow.</p>
+                
+                <h3>Key Drivers</h3>
+                <ul>
+                    <li><strong>Scale & Footprint:</strong> Operating 13 factories across Japan, mitigating logistics costs and fuel price volatility.</li>
+                    <li><strong>E-Commerce Growth:</strong> Strong awareness and structural growth in direct website sales and Amazon distribution.</li>
+                    <li><strong>Capacity Expansion:</strong> Expanding the Gotemba facility to meet demand that currently outpaces supply.</li>
+                </ul>
+
+                <table class="fin-table">
+                    <tr><th>Financial Snapshot (FQ2 2025)</th><th>Actual (¥M)</th></tr>
+                    <tr><td>Revenue</td><td>12,779</td></tr>
+                    <tr><td>Gross Profit</td><td>5,638</td></tr>
+                    <tr><td>Operating Income</td><td class="highlight-green">1,817</td></tr>
+                </table>
+            `
+        },
+        {
+            id: 'paypal',
+            name: 'PayPal Holdings',
+            ticker: 'PYPL',
+            country: '🇺🇸 USA',
+            industry: 'Financial Technology',
+            content: `<h2>PayPal Holdings (PYPL)</h2><p><em>Comprehensive financial model and investment thesis currently under review. Updating DCF parameters to account for Braintree margin expansion and Fastlane adoption metrics. Check back soon.</em></p>`
+        },
+        {
+            id: 'amazon',
+            name: 'Amazon.com',
+            ticker: 'AMZN',
+            country: '🇺🇸 USA',
+            industry: 'E-commerce / Cloud',
+            content: `<h2>Amazon.com (AMZN)</h2><p><em>Research currently compiling. Analyzing AWS margin growth vs. retail capex cycles. Full breakdown available soon.</em></p>`
+        },
+        {
+            id: 'alphabet',
+            name: 'Alphabet Inc',
+            ticker: 'GOOGL',
+            country: '🇺🇸 USA',
+            industry: 'Technology / Internet',
+            content: `<h2>Alphabet Inc (GOOGL)</h2><p><em>Research currently compiling. Focusing on GCP path to profitability and structural AI capital expenditures.</em></p>`
+        },
+        {
+            id: 'nv5',
+            name: 'NV5 Global',
+            ticker: 'NVEE',
+            country: '🇺🇸 USA',
+            industry: 'Engineering Consulting',
+            content: `<h2>NV5 Global (NVEE)</h2><p><em>Model under construction. Tracking infrastructure bill tailwinds and M&A integration efficiency.</em></p>`
+        },
+        {
+            id: 'nordea',
+            name: 'Nordea Bank',
+            ticker: 'NDA-FI',
+            country: '🇫🇮 Finland',
+            industry: 'Financial Services',
+            content: `<h2>Nordea Bank Abp (NDA-FI)</h2><p><em>Analyzing Nordic macro exposure, Net Interest Income (NII) sensitivity to ECB rate cuts, and capital return policies.</em></p>`
+        },
+        {
+            id: 'ubisoft',
+            name: 'Ubisoft Ent.',
+            ticker: 'UBI.PA',
+            country: '🇫🇷 France',
+            industry: 'Gaming & Entertainment',
+            content: `<h2>Ubisoft Entertainment (UBI.PA)</h2><p><em>Research under review. Assessing AAA pipeline delays, fundamental restructuring, and potential buyout valuation floors.</em></p>`
+        },
+        {
+            id: 'nintendo',
+            name: 'Nintendo Co.',
+            ticker: '7974.T',
+            country: '🇯🇵 Japan',
+            industry: 'Consumer Electronics',
+            content: `<h2>Nintendo Co. Ltd (7974.T)</h2><p><em>Awaiting next-generation console lifecycle announcements to finalize hardware transition revenue models.</em></p>`
+        }
+    ];
+
+    // --- 2. RENDER THE GRID ---
+    const gridContainer = document.getElementById('stockGrid');
+
+    stocks.forEach(stock => {
+        const card = document.createElement('div');
+        card.className = 'stock-card';
+        card.onclick = () => openModal(stock.id);
+        
+        card.innerHTML = `
+            <div class="stock-header">
+                <h3 class="stock-name">${stock.name}</h3>
+                <span class="stock-ticker">${stock.ticker}</span>
+            </div>
+            <p class="stock-info">🌎 <span>${stock.country}</span></p>
+            <p class="stock-info">🏢 <span>${stock.industry}</span></p>
+        `;
+        
+        gridContainer.appendChild(card);
+    });
+
+    // --- 3. MODAL LOGIC ---
+    const modal = document.getElementById('researchModal');
+    const modalBody = document.getElementById('modalBody');
+
+    function openModal(stockId) {
+        // Find the correct stock data
+        const stockData = stocks.find(s => s.id === stockId);
+        if (stockData) {
+            // Inject the HTML content
+            modalBody.innerHTML = stockData.content;
+            // Show the modal
+            modal.classList.add('active');
+            // Prevent background scrolling
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closeModal(event) {
+        // Only close if clicking the close button OR the background overlay
+        if (event.target.classList.contains('modal-overlay') || event.target.classList.contains('close-btn')) {
+            modal.classList.remove('active');
+            // Restore background scrolling
+            document.body.style.overflow = 'auto';
+            // Clear content after animation finishes
+            setTimeout(() => { modalBody.innerHTML = ''; }, 300);
+        }
+    }
+
+
+    // --- 4. ANIMATED DATA NETWORK BACKGROUND ---
     const canvas = document.getElementById("dataNetwork");
     const ctx = canvas.getContext("2d");
     canvas.width = window.innerWidth;
