@@ -3,81 +3,369 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nichirei Corp Analysis - Pål Sandström</title>
+    <title>Nichirei Corp (2871.T) - Equity Research</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        * { box-sizing: border-box; }
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #050505;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
             color: #cbd5e1;
+            background-color: #050505;
             margin: 0;
-            padding: 40px;
+            padding: 40px 20px;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        .report-container {
-            max-width: 900px;
-            width: 100%;
-            background: rgba(20, 25, 35, 0.6);
+        #dataNetwork { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.6; }
+
+        /* Navigation */
+        .btn-back {
+            padding: 10px 20px;
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border: 1px solid #10b981;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+            margin-bottom: 30px;
+        }
+        .btn-back:hover { background: #10b981; color: #050505; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+
+        /* Main Report Block */
+        .report-block {
+            background: rgba(20, 25, 35, 0.85);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
+            border-radius: 16px 16px 0 0; 
+            width: 100%;
+            max-width: 950px;
+            min-height: 600px;
             padding: 40px;
         }
 
-        .nav-link { color: #10b981; text-decoration: none; font-weight: bold; margin-bottom: 20px; display: block; }
-        
-        h1 { color: #f8fafc; border-bottom: 2px solid #10b981; padding-bottom: 10px; }
-        h2 { color: #38bdf8; margin-top: 30px; border-left: 4px solid #38bdf8; padding-left: 15px; }
-        
-        .fin-table {
+        /* Typography */
+        h1, h2, h3 { color: #10b981; margin-top: 0; }
+        h1 { font-size: 2.2em; border-bottom: 1px solid rgba(16, 185, 129, 0.2); padding-bottom: 10px; margin-bottom: 25px; }
+        h2 { font-size: 1.5em; margin-top: 20px; }
+        .sub-header { color: #94a3b8; font-family: monospace; margin-bottom: 20px; }
+
+        /* Excel-Style Tabs at bottom of block */
+        .tab-container {
             width: 100%;
-            border-collapse: collapse;
+            max-width: 950px;
+            display: flex;
+            background: #1e293b;
+            border-radius: 0 0 16px 16px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: none;
+            flex-wrap: wrap;
+        }
+        .tab {
+            padding: 12px 20px;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: bold;
+            border-right: 1px solid #334155;
+            transition: 0.2s;
+            flex-grow: 1;
+            text-align: center;
+        }
+        .tab:hover { background: rgba(255,255,255,0.05); }
+        .tab.active { background: #0f172a; color: #10b981; border-bottom: 3px solid #10b981; }
+
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; background: rgba(0,0,0,0.2); }
+        th { text-align: left; color: #38bdf8; border-bottom: 1px solid #334155; padding: 12px; font-size: 0.8em; text-transform: uppercase; }
+        td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .num { text-align: right; font-family: 'Courier New', monospace; }
+        .pos { color: #10b981; font-weight: bold; }
+        .neg { color: #f43f5e; }
+
+        /* Highlight Box & Grids */
+        .thesis-box {
+            background: rgba(16, 185, 129, 0.05);
+            border-left: 4px solid #10b981;
+            padding: 20px;
             margin: 20px 0;
-            background: rgba(0, 0, 0, 0.3);
         }
-        .fin-table th, .fin-table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .fin-table th { color: #38bdf8; font-size: 0.9em; text-transform: uppercase; }
-        .val-cell { text-align: right; font-family: monospace; }
-        .highlight { color: #10b981; font-weight: bold; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .chart-container { background: rgba(0,0,0,0.3); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); margin-top: 20px;}
     </style>
 </head>
 <body>
 
-    <div class="report-container">
-        <a href="../stock-research.html" class="nav-link">← Back to Research Hub</a>
-        
+<canvas id="dataNetwork"></canvas>
+
+<a href="../stock-research.html" class="btn-back">← Back to Equity Research</a>
+
+<div class="report-block">
+    <div id="general" class="tab-content active">
         <h1>Nichirei Corp (2871.T)</h1>
-        <p><em>Last Updated: February 2026</em></p>
+        <div class="sub-header">MARKET CAP: ¥432,330M  | EXCHANGE: TSE  | COMPOSITE: NIKKEI 225 </div>
+        
+        <div class="thesis-box">
+            <h3>Investment Thesis</h3>
+            <p>Nichirei presents a high-margin safety play in the Japanese cold-chain sector. The core thesis rests on a <strong>fortress balance sheet</strong> where current assets nearly cover total liabilities 5, , combined with a management team that utilizes aggressive buybacks (¥10B planned for 2025)  to provide a valuation floor.</p>
+        </div>
 
-        <h2>1. Business Overview & Revenue</h2>
-        <p>Nichirei is a leader in Japanese cold-chain logistics and processed foods...</p>
-        <h2>2. Cash Flow Analysis</h2>
-        <table class="fin-table">
-            <thead>
-                <tr><th>Metric (¥M)</th><th class="val-cell">FY2024</th><th class="val-cell">FY2025 (E)</th></tr>
-            </thead>
-            <tbody>
-                <tr><td>Operating Cash Flow</td><td class="val-cell">62,442</td><td class="val-cell">65,100</td></tr>
-                <tr><td>Capital Expenditure</td><td class="val-cell">-28,000</td><td class="val-cell">-30,000</td></tr>
-                <tr><td><strong>Free Cash Flow</strong></td><td class="val-cell highlight">34,442</td><td class="val-cell highlight">35,100</td></tr>
-            </tbody>
-        </table>
-
-        <h2>3. Balance Sheet Strength</h2>
-        <p>The company maintains a "Fortress" balance sheet with current assets significantly exceeding total liabilities...</p>
-
-        <h2>4. DCF Valuation</h2>
-        <p>Based on a 10% discount rate and 9% long-term growth, the model implies significant upside.</p>
-        <div style="background: rgba(16, 185, 129, 0.1); padding: 20px; border-radius: 8px; border: 1px solid #10b981;">
-            <strong>Intrinsic Value:</strong> ¥1,864 | <strong>Current Price:</strong> ¥1,500 | <strong>Upside:</strong> 24.3%
+        <div class="grid-2">
+            <div>
+                <h3>Valuation Metrics</h3>
+                <table>
+                    <tr><td>Current Market Price</td><td class="num">¥1,722.50 </td></tr>
+                    <tr><td>Price in SEK (100 Shares)</td><td class="num">10,067.50 SEK </td></tr>
+                    <tr><td>Model Implied Fair Value</td><td class="num pos">¥1,864.50 </td></tr>
+                    <tr><td>Upside to Fair Value</td><td class="num pos">+8.25% </td></tr>
+                </table>
+            </div>
+            <div>
+                <h3>Key Institutional Ownership</h3>
+                <table>
+                    <tr><td>Nomura Asset Mgmt</td><td class="num">3.39% </td></tr>
+                    <tr><td>Nippon Life Insurance</td><td class="num">2.45% </td></tr>
+                    <tr><td>Sumitomo Mitsui</td><td class="num">1.96% </td></tr>
+                    <tr><td>Vanguard / Norges Bank</td><td class="num">1.19% each </td></tr>
+                </table>
+            </div>
         </div>
     </div>
+
+    <div id="income" class="tab-content">
+        <h2>Revenue & Operating Breakdowns</h2>
+        <p>The business is driven by two main pillars: Processed Foods and Logistics. Note: Livestock and Fisheries are utilized by the processed food segment, but sold separately via Nichirei Fresh Inc.</p>
+        
+        <div class="grid-2">
+            <div>
+                <table>
+                    <thead>
+                        <tr><th>Segment</th><th>Rev %</th><th>EBIT %</th><th>Margin</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Processed Food</td><td class="num">41.38% </td><td class="num">46.04% </td><td class="num">5.99% </td></tr>
+                        <tr><td>Logistics</td><td class="num">36.61% </td><td class="num">41.85% </td><td class="num">6.15% </td></tr>
+                        <tr><td>Livestock</td><td class="num">11.64% </td><td class="num">2.76% </td><td class="num">1.27% </td></tr>
+                        <tr><td>Fisheries</td><td class="num">8.76% </td><td class="num">3.40% </td><td class="num">1.56% </td></tr>
+                        <tr><td>Real Estate</td><td class="num">0.64% </td><td class="num">4.39% </td><td class="num">37.16% </td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="chart-container" style="display: flex; justify-content: center; max-height: 250px;">
+                <canvas id="segmentChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div id="growth" class="tab-content">
+        <h2>Historical TTM Revenue Growth (Mil Yen)</h2>
+        <p>Consistent, low-volatility revenue expansion characterized by an average historical growth pattern.</p>
+        <div class="chart-container" style="position: relative; height:350px; width:100%">
+            <canvas id="growthChart"></canvas>
+        </div>
+    </div>
+
+    <div id="cashflow" class="tab-content">
+        <h2>Capital Allocation & Cash Flow (Mil Yen)</h2>
+        <table>
+            <thead>
+                <tr><th>Year</th><th>Cash from Ops</th><th>Dividends</th><th>Buybacks</th><th>Capex</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>2021 FY</td><td class="num">45,453 </td><td class="num">-5,722 </td><td class="num neg">-7 </td><td class="num">-28,529 </td></tr>
+                <tr><td>2022 FY</td><td class="num">34,660 </td><td class="num">-7,053 </td><td class="num neg">-10,012 </td><td class="num">-21,289 </td></tr>
+                <tr><td>2023 FY</td><td class="num">37,865 </td><td class="num">-6,595 </td><td class="num neg">-5,009 </td><td class="num">-23,830 </td></tr>
+                <tr><td>2024 FY</td><td class="num">62,442 </td><td class="num">-8,034 </td><td class="num neg">-10 </td><td class="num">-26,726 </td></tr>
+                <tr><td>2025 FY</td><td class="num">53,194 </td><td class="num">-9,949 </td><td class="num neg">-10,010 </td><td class="num">-28,328 </td></tr>
+            </tbody>
+        </table>
+        <p><strong>Strategy Note:</strong> The company buys back shares whenever the operations result is underwhelming, likely to show confidence to investors or to capitalize on a cheap stock price. Average dividend growth is approximately 9%.</p>
+    </div>
+
+    <div id="balance" class="tab-content">
+        <h2>Financial Strength (Millions of Yen)</h2>
+        <div class="grid-2">
+            <div>
+                <h3 style="color: #38bdf8;">Assets</h3>
+                <table>
+                    <tr><td><strong>Current Assets (CA)</strong></td><td class="num">204,925 </td></tr>
+                    <tr><td>&nbsp;&nbsp;&nbsp;Cash</td><td class="num">40,000 </td></tr>
+                    <tr><td>&nbsp;&nbsp;&nbsp;Accounts Rec.</td><td class="num">101,000 </td></tr>
+                    <tr><td>&nbsp;&nbsp;&nbsp;Inventory</td><td class="num">54,000 </td></tr>
+                    <tr style="border-top: 1px solid #334155;"><td><strong>Non-Current Assets</strong></td><td class="num">294,296 </td></tr>
+                    <tr><td>&nbsp;&nbsp;&nbsp;PPE</td><td class="num">219,238 </td></tr>
+                    <tr><td>&nbsp;&nbsp;&nbsp;LTI / Intangibles</td><td class="num">53,925 </td></tr>
+                </table>
+            </div>
+            <div>
+                <h3 style="color: #f43f5e;">Liabilities</h3>
+                <table>
+                    <tr><td><strong>Current Liabilities</strong></td><td class="num">129,000 </td></tr>
+                    <tr><td><strong>Non-Current Liab.</strong></td><td class="num">110,098 </td></tr>
+                    <tr><td>&nbsp;&nbsp;&nbsp;Long term debt</td><td class="num">73,624 </td></tr>
+                    <tr><td>&nbsp;&nbsp;&nbsp;Others</td><td class="num">11,984 </td></tr>
+                    <tr style="border-top: 2px solid #334155;"><td><strong>Total Liabilities</strong></td><td class="num">239,098 </td></tr>
+                </table>
+            </div>
+        </div>
+        <div class="thesis-box" style="border-color: #38bdf8;">
+            <p><strong>Solidarity:</strong> Current assets (¥204,925M) almost entirely cover total liabilities (¥239,098M), representing a super solid balance sheet5, .</p>
+        </div>
+    </div>
+
+    <div id="dcf" class="tab-content">
+        <h2>DCF Model Parameters (Millions of Yen)</h2>
+        <div class="grid-2">
+            <div>
+                <table>
+                    <tr><td>Discount Rate (WACC)</td><td class="num">10.00% </td></tr>
+                    <tr><td>Long-term Growth Rate</td><td class="num">9.00% </td></tr>
+                    <tr><td>Free Cash Flow Yield</td><td class="num">6.79% </td></tr>
+                    <tr><td>CAGR</td><td class="num">9.39% - 9.92% </td></tr>
+                </table>
+            </div>
+            <div>
+                <table>
+                    <tr><td>Total PV (2026-2035)</td><td class="num">343,119 </td></tr>
+                    <tr><td>Terminal Value (Discounted)</td><td class="num">717,636 </td></tr>
+                    <tr style="border-top: 2px solid #10b981;"><td><strong>Enterprise Value</strong></td><td class="num pos">1,060,755 </td></tr>
+                    <tr><td>Current Market Cap</td><td class="num">432,330 </td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="tab-container">
+    <div class="tab active" onclick="switchTab(event, 'general')">Overview</div>
+    <div class="tab" onclick="switchTab(event, 'income')">Segments</div>
+    <div class="tab" onclick="switchTab(event, 'growth')">Growth History</div>
+    <div class="tab" onclick="switchTab(event, 'cashflow')">Capital Alloc.</div>
+    <div class="tab" onclick="switchTab(event, 'balance')">Balance Sheet</div>
+    <div class="tab" onclick="switchTab(event, 'dcf')">DCF Model</div>
+</div>
+
+<script>
+    // Tab Switching Logic
+    function switchTab(evt, tabName) {
+        var i, content, tabs;
+        content = document.getElementsByClassName("tab-content");
+        for (i = 0; i < content.length; i++) { content[i].classList.remove("active"); }
+        tabs = document.getElementsByClassName("tab");
+        for (i = 0; i < tabs.length; i++) { tabs[i].classList.remove("active"); }
+        document.getElementById(tabName).classList.add("active");
+        evt.currentTarget.classList.add("active");
+    }
+
+    // Chart.js Implementations
+    window.onload = function() {
+        // Doughnut Chart for Segments
+        const ctxSeg = document.getElementById('segmentChart').getContext('2d');
+        new Chart(ctxSeg, {
+            type: 'doughnut',
+            data: {
+                labels: ['Processed Food', 'Logistics', 'Livestock', 'Fisheries', 'Real Estate', 'Other'],
+                datasets: [{
+                    data: [41.38, 36.61, 11.64, 8.76, 0.64, 0.9,
+                    backgroundColor: ['#10b981', '#38bdf8', '#8b5cf6', '#f43f5e', '#eab308', '#64748b'],
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: { position: 'right', labels: { color: '#cbd5e1' } }
+                }
+            }
+        });
+
+        // Line Chart for TTM Revenue (End of Year Samples 2016-2025)
+        const ctxGrowth = document.getElementById('growthChart').getContext('2d');
+        new Chart(ctxGrowth, {
+            type: 'line',
+            data: {
+                labels: ['Q4 2016', 'Q4 2017', 'Q4 2018', 'Q4 2019', 'Q4 2020', 'Q4 2021', 'Q4 2022', 'Q4 2023', 'Q4 2024', 'Q4 2025'],
+                datasets: [{
+                    label: 'TTM Revenue (Mil Yen)',
+                    data: [539657, 540097, 560087, 580141, 580109, 572757, 602696, 662204, 680091, 702080],
+                    borderColor: '#38bdf8',
+                    backgroundColor: 'rgba(56, 189, 248, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
+                    x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } }
+                },
+                plugins: { legend: { labels: { color: '#cbd5e1' } } }
+            }
+        });
+    }
+
+    // --- Flying Green Background Script ---
+    const canvas = document.getElementById("dataNetwork");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    let particlesArray = [];
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2 + 1;
+            this.speedX = Math.random() * 0.8 - 0.4;
+            this.speedY = Math.random() * 0.8 - 0.4;
+        }
+        update() {
+            this.x += this.speedX; this.y += this.speedY;
+            if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+            if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+        }
+        draw() {
+            ctx.fillStyle = 'rgba(16, 185, 129, 0.9)'; 
+            ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
+        }
+    }
+    function init() {
+        particlesArray = [];
+        for (let i = 0; i < 80; i++) { particlesArray.push(new Particle()); }
+    }
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < particlesArray.length; i++) {
+            particlesArray[i].update(); particlesArray[i].draw();
+            for (let j = i; j < particlesArray.length; j++) {
+                const dx = particlesArray[i].x - particlesArray[j].x;
+                const dy = particlesArray[i].y - particlesArray[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                if (distance < 140) {
+                    ctx.beginPath();
+                    ctx.strokeStyle = `rgba(56, 189, 248, ${0.8 - distance/140})`;
+                    ctx.lineWidth = 1.2;
+                    ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
+                    ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
+                    ctx.stroke();
+                }
+            }
+        }
+        requestAnimationFrame(animate);
+    }
+    window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; init(); });
+    init(); animate();
+</script>
 
 </body>
 </html>
