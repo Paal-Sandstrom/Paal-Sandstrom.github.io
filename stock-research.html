@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Research - Pål Sandström</title>
+    <title>Equity Research - Pål Sandström</title>
     <style>
-        /* KEEPING YOUR EXACT STYLES */
+        /* KEEPING YOUR ORIGINAL DESIGN STYLES */
         * { box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -21,6 +21,7 @@
             overflow-x: hidden;
         }
 
+        /* Animated Background Canvas */
         #dataNetwork {
             position: fixed;
             top: 0;
@@ -31,6 +32,7 @@
             opacity: 0.7; 
         }
 
+        /* Top Navigation */
         .nav-header {
             width: 100%;
             max-width: 1200px;
@@ -44,6 +46,23 @@
         }
         .nav-header h1 { margin: 0; color: #f8fafc; font-size: 2.2em; }
 
+        /* The Nice Looking Back Button */
+        .btn-back {
+            padding: 10px 20px;
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border: 1px solid #10b981;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .btn-back:hover { 
+            background: #10b981; 
+            color: #050505; 
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); 
+        }
+
         .stock-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -53,7 +72,7 @@
             z-index: 1;
         }
 
-        /* The Card - Now acts as a link container */
+        /* Individual Stock Card (keeping the hover/blur effect) */
         .stock-card {
             background-color: rgba(20, 25, 35, 0.6);
             backdrop-filter: blur(12px);
@@ -66,10 +85,9 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
             display: flex;
             flex-direction: column;
-            text-decoration: none; /* Important for the <a> tag */
+            text-decoration: none;
             color: inherit;
         }
-
         .stock-card:hover {
             transform: translateY(-8px) scale(1.02);
             border-color: #38bdf8;
@@ -90,14 +108,13 @@
 <canvas id="dataNetwork"></canvas>
 
 <div class="nav-header">
-    <h1>Equity Research Hub</h1>
-    <div style="color: #10b981; font-weight: bold;">Pål Sandström</div>
+    <h1>Equity Research</h1>
+    <a href="index.html" class="btn-back">← Back to Home</a>
 </div>
 
 <div class="stock-grid" id="stockGrid"></div>
 
 <script>
-    // 1. UPDATED DATABASE (No more 'content' bloat, just the path to your file)
     const stocks = [
         { id: 'nichirei', name: 'Nichirei Corp', ticker: '2871.T', country: '🇯🇵 Japan', industry: 'Food & Logistics' },
         { id: 'lifedrink', name: 'Lifedrink Co.', ticker: '2585.T', country: '🇯🇵 Japan', industry: 'Beverages' },
@@ -110,13 +127,13 @@
         { id: 'nintendo', name: 'Nintendo Co.', ticker: '7974.T', country: '🇯🇵 Japan', industry: 'Gaming' }
     ];
 
-    // 2. RENDER THE GRID (Cards now act as links)
     const gridContainer = document.getElementById('stockGrid');
 
     stocks.forEach(stock => {
-        const card = document.createElement('a'); // Changed from 'div' to 'a'
+        const card = document.createElement('a');
         card.className = 'stock-card';
-        card.href = `research/${stock.id}.html`; // Links to research/nichirei.html, etc.
+        // Pointing to your new research folder
+        card.href = `research/${stock.id}.html`;
         
         card.innerHTML = `
             <div class="stock-header">
@@ -130,7 +147,7 @@
         gridContainer.appendChild(card);
     });
 
-    // 3. ANIMATED DATA NETWORK BACKGROUND (Keeping your original logic)
+    // --- ANIMATED DATA NETWORK BACKGROUND ---
     const canvas = document.getElementById("dataNetwork");
     const ctx = canvas.getContext("2d");
     canvas.width = window.innerWidth;
