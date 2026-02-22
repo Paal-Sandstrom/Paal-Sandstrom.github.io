@@ -1,2 +1,2 @@
 # Paal-Sandstrom.github.io
-Personal website
+This is for my personal website, where I also publish my stock research. 
