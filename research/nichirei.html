@@ -1,1 +1,83 @@
-<p>hello world</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nichirei Corp Analysis - Pål Sandström</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #050505;
+            color: #cbd5e1;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .report-container {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(20, 25, 35, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 40px;
+        }
+
+        .nav-link { color: #10b981; text-decoration: none; font-weight: bold; margin-bottom: 20px; display: block; }
+        
+        h1 { color: #f8fafc; border-bottom: 2px solid #10b981; padding-bottom: 10px; }
+        h2 { color: #38bdf8; margin-top: 30px; border-left: 4px solid #38bdf8; padding-left: 15px; }
+        
+        .fin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        .fin-table th, .fin-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .fin-table th { color: #38bdf8; font-size: 0.9em; text-transform: uppercase; }
+        .val-cell { text-align: right; font-family: monospace; }
+        .highlight { color: #10b981; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="report-container">
+        <a href="../stock-research.html" class="nav-link">← Back to Research Hub</a>
+        
+        <h1>Nichirei Corp (2871.T)</h1>
+        <p><em>Last Updated: February 2026</em></p>
+
+        <h2>1. Business Overview & Revenue</h2>
+        <p>Nichirei is a leader in Japanese cold-chain logistics and processed foods...</p>
+        <h2>2. Cash Flow Analysis</h2>
+        <table class="fin-table">
+            <thead>
+                <tr><th>Metric (¥M)</th><th class="val-cell">FY2024</th><th class="val-cell">FY2025 (E)</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Operating Cash Flow</td><td class="val-cell">62,442</td><td class="val-cell">65,100</td></tr>
+                <tr><td>Capital Expenditure</td><td class="val-cell">-28,000</td><td class="val-cell">-30,000</td></tr>
+                <tr><td><strong>Free Cash Flow</strong></td><td class="val-cell highlight">34,442</td><td class="val-cell highlight">35,100</td></tr>
+            </tbody>
+        </table>
+
+        <h2>3. Balance Sheet Strength</h2>
+        <p>The company maintains a "Fortress" balance sheet with current assets significantly exceeding total liabilities...</p>
+
+        <h2>4. DCF Valuation</h2>
+        <p>Based on a 10% discount rate and 9% long-term growth, the model implies significant upside.</p>
+        <div style="background: rgba(16, 185, 129, 0.1); padding: 20px; border-radius: 8px; border: 1px solid #10b981;">
+            <strong>Intrinsic Value:</strong> ¥1,864 | <strong>Current Price:</strong> ¥1,500 | <strong>Upside:</strong> 24.3%
+        </div>
+    </div>
+
+</body>
+</html>
