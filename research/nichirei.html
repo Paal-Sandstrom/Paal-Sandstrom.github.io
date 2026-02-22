@@ -105,6 +105,138 @@
         }
         .chart-tall { height: 350px; }
         .chart-short { height: 250px; }
+
+        /* MOBILE RESPONSIVE STYLES */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 15px;
+            }
+
+            .btn-back {
+                margin-left: 0;
+                padding: 8px 16px;
+                font-size: 0.9em;
+                margin-bottom: 20px;
+            }
+
+            .report-block {
+                padding: 25px 20px;
+                border-radius: 12px;
+            }
+
+            h1 {
+                font-size: 1.6em;
+                margin-bottom: 8px;
+            }
+
+            h2 {
+                font-size: 1.3em;
+                margin-top: 30px;
+            }
+
+            .sub-header {
+                font-size: 0.95em;
+                margin-bottom: 20px;
+            }
+
+            p {
+                font-size: 0.95em;
+                margin-bottom: 15px;
+            }
+
+            /* Stack metrics into 2x2 grid on mobile */
+            .metrics-banner {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                margin-bottom: 30px;
+            }
+
+            .metric-card {
+                padding: 12px;
+            }
+
+            .metric-title {
+                font-size: 0.65em;
+            }
+
+            .metric-value {
+                font-size: 1.2em;
+            }
+
+            /* Stack grid-2 layouts vertically */
+            .grid-2 {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .thesis-box, .risk-box {
+                padding: 15px;
+                margin: 15px 0;
+            }
+
+            .chart-box {
+                padding: 15px;
+            }
+
+            .chart-tall {
+                height: 280px;
+            }
+
+            .chart-short {
+                height: 220px;
+            }
+
+            /* Make ordered list more compact */
+            .risk-box ol {
+                padding-left: 20px;
+            }
+
+            .risk-box li {
+                margin-bottom: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px 10px;
+            }
+
+            .report-block {
+                padding: 20px 15px;
+            }
+
+            h1 {
+                font-size: 1.4em;
+            }
+
+            h2 {
+                font-size: 1.2em;
+            }
+
+            .sub-header {
+                font-size: 0.85em;
+            }
+
+            p {
+                font-size: 0.9em;
+            }
+
+            .metric-title {
+                font-size: 0.6em;
+            }
+
+            .metric-value {
+                font-size: 1.1em;
+            }
+
+            .chart-tall {
+                height: 250px;
+            }
+
+            .chart-short {
+                height: 200px;
+            }
+        }
     </style>
 </head>
 <body>
