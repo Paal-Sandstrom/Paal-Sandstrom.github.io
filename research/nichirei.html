@@ -46,22 +46,23 @@
             border-radius: 16px; 
             width: 100%;
             max-width: 950px;
-            padding: 30px;
+            padding: 40px;
             margin-bottom: 30px;
         }
 
         /* Typography */
         h1, h2, h3 { color: #10b981; margin-top: 0; }
         h1 { font-size: 2.2em; margin-bottom: 5px; }
-        h2 { font-size: 1.3em; margin-top: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; color: #f8fafc; }
-        .sub-header { color: #94a3b8; font-family: monospace; margin-bottom: 20px; font-size: 1.1em; }
+        h2 { font-size: 1.5em; margin-top: 40px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; color: #f8fafc; }
+        .sub-header { color: #94a3b8; font-family: monospace; margin-bottom: 30px; font-size: 1.1em; }
+        p { font-size: 1.05em; color: #cbd5e1; margin-bottom: 20px; }
 
         /* Key Metrics Banner */
         .metrics-banner {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 15px;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
         .metric-card {
             background: rgba(0,0,0,0.4);
@@ -74,53 +75,8 @@
         .metric-value { font-size: 1.5em; font-weight: bold; color: #f8fafc; margin-top: 5px; }
         .metric-value.pos { color: #10b981; }
 
-        /* Hero Chart Container */
-        .hero-chart-container {
-            height: 350px;
-            width: 100%;
-            margin-bottom: 30px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 8px;
-            padding: 20px;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        /* Tabs Setup */
-        .tab-container {
-            width: 100%;
-            display: flex;
-            background: #1e293b;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 20px;
-        }
-        .tab {
-            padding: 12px 20px;
-            color: #94a3b8;
-            cursor: pointer;
-            font-size: 0.9em;
-            font-weight: bold;
-            border-right: 1px solid #334155;
-            transition: 0.2s;
-            flex-grow: 1;
-            text-align: center;
-        }
-        .tab:hover { background: rgba(255,255,255,0.05); }
-        .tab.active { background: #0f172a; color: #10b981; border-bottom: 3px solid #10b981; }
-
-        .tab-content { display: none; animation: fadeIn 0.3s ease; }
-        .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* Tables & Grids */
-        table { width: 100%; border-collapse: collapse; margin: 10px 0 20px 0; background: rgba(0,0,0,0.2); }
-        th { text-align: left; color: #38bdf8; border-bottom: 1px solid #334155; padding: 10px; font-size: 0.8em; text-transform: uppercase; }
-        td { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9em; }
-        .num { text-align: right; font-family: 'Courier New', monospace; }
-        .pos { color: #10b981; font-weight: bold; }
-        .neg { color: #f43f5e; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        /* Layout Grids */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 20px; align-items: center; }
 
         /* Highlight Box */
         .thesis-box {
@@ -130,13 +86,25 @@
             margin: 20px 0;
             border-radius: 0 8px 8px 0;
         }
-        
+        .risk-box {
+            background: rgba(244, 63, 94, 0.05);
+            border-left: 4px solid #f43f5e;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* Chart Containers */
         .chart-box {
             background: rgba(0,0,0,0.3); 
             border-radius: 8px; 
             padding: 20px;
             border: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 20px;
+            width: 100%;
         }
+        .chart-tall { height: 350px; }
+        .chart-short { height: 250px; }
     </style>
 </head>
 <body>
@@ -146,7 +114,7 @@
 <a href="../stock-research.html" class="btn-back">← Back to Equity Research</a>
 
 <div class="report-block">
-    <h1>Nichirei Corp</h1>
+    <h1>Nichirei Corp (ニチレイ)</h1>
     <div class="sub-header">TSE: 2871 | NIKKEI 225</div>
 
     <div class="metrics-banner">
@@ -163,159 +131,77 @@
             <div class="metric-value">¥1,722.5</div>
         </div>
         <div class="metric-card">
-            <div class="metric-title">Fair Value Target</div>
-            <div class="metric-value pos">¥1,864.5 (+8.2%)</div>
+            <div class="metric-title">Fair Value (DCF)</div>
+            <div class="metric-value pos">¥1,654.5</div>
         </div>
     </div>
 
-    <div class="hero-chart-container">
-        <canvas id="heroChart"></canvas>
+    <h2>The Business</h2>
+    <p>Nichirei is a Japanese frozen food business headquartered in Tokyo. Revenue is derived from several segments, predominantly Processed Food and Logistics.</p>
+    
+    <div class="grid-2">
+        <div class="chart-box chart-short" style="display: flex; justify-content: center;">
+            <canvas id="segmentChart"></canvas>
+        </div>
+        <div>
+            <p>As is visible in the breakdown, their highest margin segment is real estate (37.16%), but their logistics division boasts a massive 6.15% operating margin compared to their core food segments. While they call it logistics, it's really centered around cold storage—both for their own frozen food products and for other businesses as they lend out the storage space.</p>
+        </div>
+    </div>
+    <p>They are actively expanding their cold storage footprint in Europe (currently in Poland and the UK) as well as North America. Management is well aware of the declining Japanese population and is expanding overseas specifically to mitigate that demographic risk. They are also incredibly proud of their frozen food—even going as far as giving out free samples to investors across the world depending on the size of their stake!</p>
+
+    <h2>Revenue Growth</h2>
+    <p>The company is extremely stable. Over the last several years, total average revenue growth comes out to a steady 3.11%.</p>
+    <div class="chart-box chart-tall">
+        <canvas id="revenueChart"></canvas>
     </div>
 
-    <div class="tab-container">
-        <div class="tab active" onclick="switchTab(event, 'financials')">Financial Statements</div>
-        <div class="tab" onclick="switchTab(event, 'segments')">Revenue & Margins</div>
-        <div class="tab" onclick="switchTab(event, 'valuation')">Valuation & Thesis</div>
+    <h2>Cash Generation & Capital Allocation</h2>
+    <p>While top-line revenue growth is relatively slow, Nichirei's Cash from Operations has consistently grown over the last 10 years, averaging a 9.82% growth rate annually. Most of this comes from improving operating margins and operational efficiency.</p>
+    <div class="chart-box chart-tall">
+        <canvas id="cfoChart"></canvas>
     </div>
 
-    <div id="financials" class="tab-content active">
-        <div class="grid-2" style="margin-bottom: 20px;">
-            <div>
-                <h2>Balance Sheet (2025 FY)</h2>
-                <table>
-                    <tr><td>Current Assets</td><td class="num">204,925</td></tr>
-                    <tr><td style="color:#94a3b8;">Cash</td><td class="num" style="color:#94a3b8;">40,000</td></tr>
-                    <tr><td>Non-Current Assets</td><td class="num">294,296</td></tr>
-                    <tr style="border-top: 1px solid #334155;"><td><strong>Total Assets</strong></td><td class="num"><strong>499,221</strong></td></tr>
-                    <tr><td>Current Liab.</td><td class="num">129,000</td></tr>
-                    <tr><td>Non-Current Liab.</td><td class="num">110,098</td></tr>
-                    <tr style="border-top: 1px solid #334155;"><td><strong>Total Liab.</strong></td><td class="num"><strong>239,098</strong></td></tr>
-                </table>
-            </div>
-            
-            <div>
-                <h2>Cash Flow Summary</h2>
-                <table>
-                    <tr><th>Metric (2025 FY)</th><th>Amount</th></tr>
-                    <tr><td>Cash from Ops</td><td class="num pos">53,194</td></tr>
-                    <tr><td>CapEx</td><td class="num neg">-28,328</td></tr>
-                    <tr style="border-top: 1px solid #334155;"><td><strong>Free Cash Flow</strong></td><td class="num pos"><strong>29,364</strong></td></tr>
-                    <tr><td>Dividends Paid</td><td class="num neg">-9,949</td></tr>
-                    <tr><td>Share Buybacks</td><td class="num neg">-10,010</td></tr>
-                </table>
-            </div>
-        </div>
-        
-        <h2>Historical Capital Allocation (Mil Yen)</h2>
-        <div class="chart-box" style="height: 300px; width: 100%;">
-            <canvas id="capAllocChart"></canvas>
-        </div>
+    <p>They are incredibly shareholder-friendly. They spend their cash from operations on a dividend which has grown at a massive 13.83% average clip each year.</p>
+    <div class="grid-2">
+        <div class="chart-box chart-short"><canvas id="dividendChart"></canvas></div>
+        <div class="chart-box chart-short"><canvas id="buybackChart"></canvas></div>
+    </div>
+    
+    <p>Management is also highly confident in the business, routinely issuing aggressive stock buybacks whenever the stock price declines from underwhelming operations to establish a price floor. However, the business is most exciting in terms of Capital Expenditures (CapEx). As the chart below shows, their CapEx consistently exceeds what they spend on buybacks and dividends combined each year. This proves management cares more about compounding the underlying value of the company than just appeasing investors in the short term.</p>
+    <div class="chart-box chart-tall">
+        <canvas id="capexChart"></canvas>
     </div>
 
-    <div id="segments" class="tab-content">
-        <h2>Operating Segments</h2>
-        <div class="grid-2">
-            <div>
-                <table>
-                    <thead>
-                        <tr><th>Segment</th><th>Rev %</th><th>EBIT %</th><th>Op. Margin</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>Processed Food</td><td class="num">41.38%</td><td class="num">46.04%</td><td class="num">5.99%</td></tr>
-                        <tr><td>Logistics</td><td class="num">36.61%</td><td class="num">41.85%</td><td class="num">6.15%</td></tr>
-                        <tr><td>Livestock*</td><td class="num">11.64%</td><td class="num">2.76%</td><td class="num">1.27%</td></tr>
-                        <tr><td>Fisheries*</td><td class="num">8.76%</td><td class="num">3.40%</td><td class="num">1.56%</td></tr>
-                        <tr><td>Real Estate</td><td class="num">0.64%</td><td class="num">4.39%</td><td class="num">37.16%</td></tr>
-                    </tbody>
-                </table>
-                <p style="font-size: 0.85em; color: #94a3b8;">*Livestock and Fisheries are utilized by Processed Foods but sold separately via Nichirei Fresh Inc.</p>
-            </div>
-            <div class="chart-box" style="display: flex; justify-content: center; align-items: center;">
-                <canvas id="segmentChart" style="max-height: 250px;"></canvas>
-            </div>
-        </div>
-        
-        <h2 style="margin-top: 30px;">Operating Margin Comparison</h2>
-        <div class="chart-box" style="height: 300px; width: 100%;">
-            <canvas id="marginChart"></canvas>
-        </div>
+    <h2>The Fortress Balance Sheet</h2>
+    <p>Nichirei, like many elite Japanese firms, boasts a true "fortress" balance sheet. Their current assets far exceed their current liabilities, and are almost enough to completely cover their total liabilities (including long-term debt) entirely.</p>
+    <div class="chart-box chart-tall">
+        <canvas id="balanceChart"></canvas>
     </div>
 
-    <div id="valuation" class="tab-content">
-        <div class="grid-2">
-            <div>
-                <h2>Discounted Cash Flow Model</h2>
-                <table>
-                    <tr><td>Discount Rate (WACC)</td><td class="num">10.00%</td></tr>
-                    <tr><td>Long-term Growth Rate</td><td class="num">9.00%</td></tr>
-                    <tr><td>Discounted Terminal Value</td><td class="num">¥717,636 M</td></tr>
-                    <tr><td>Total PV (2026-2035)</td><td class="num">¥343,119 M</td></tr>
-                    <tr style="border-top: 1px solid #334155;"><td><strong>Enterprise Value</strong></td><td class="num pos">¥1,060,755 M</td></tr>
-                </table>
-            </div>
-            <div>
-                <h2>Investment Thesis</h2>
-                <div class="thesis-box" style="margin-top: 0;">
-                    <p>Nichirei presents a high-margin safety play in the Japanese cold-chain sector. The core thesis rests on a highly defensible balance sheet and a massive projected Free Cash Flow yield of 6.79%.</p>
-                    <p>Furthermore, aggressive capital allocation—specifically ¥10B planned for buybacks in 2025 alongside a 9% dividend growth rate—signals management's intent to defend the stock price and return capital to shareholders efficiently.</p>
-                </div>
-            </div>
-        </div>
+    <h2>Valuation (DCF Model)</h2>
+    <div class="thesis-box">
+        <p>A 9% long-term growth rate is more than fair here, given their cash from operations has been growing at nearly 10% annually. However, to build a completely accurate DCF, we must use <strong>Free Cash Flow (FCF)</strong> instead of Cash from Operations. Using Operating Cash Flow is dangerous because it ignores the massive CapEx investments Nichirei makes every year into their cold-storage facilities.</p>
     </div>
+    <p>Starting with a 2025 FCF of ¥29,364M, applying a 9% growth rate for 10 years, a standard 10% discount rate, and a 12.5x terminal multiple, we calculate an Enterprise Value of ¥614.3 Billion. Once we subtract net debt, the implied equity value suggests a fair share price of roughly <strong>¥1,654</strong>.</p>
+    <p>While a simple Price-to-OCF multiple makes the business look heavily underestimated, a proper FCF model reveals that the market is actually pricing Nichirei's future growth incredibly rationally right now.</p>
+
+    <h2>Key Risks</h2>
+    <div class="risk-box">
+        <p>There are two main risks for Nichirei, both of which management seems to understand and take quite seriously:</p>
+        <ol>
+            <li style="margin-bottom: 10px;"><strong>The Declining Japanese Population:</strong> A shrinking domestic consumer base is a massive headwind for a food company. They are actively mitigating this risk by expanding their cold-storage operations overseas into Europe and North America.</li>
+            <li><strong>Food Safety:</strong> A food safety disaster can bring down any business almost overnight (consider the historical impacts on companies like Chipotle). However, management is spending a significant amount of capital and focus on maintaining world-class safety standards to mitigate these risks each year.</li>
+        </ol>
+    </div>
+
 </div>
 
 <script>
-    // Tab Switching Logic
-    function switchTab(evt, tabName) {
-        var i, content, tabs;
-        content = document.getElementsByClassName("tab-content");
-        for (i = 0; i < content.length; i++) { content[i].classList.remove("active"); }
-        tabs = document.getElementsByClassName("tab");
-        for (i = 0; i < tabs.length; i++) { tabs[i].classList.remove("active"); }
-        document.getElementById(tabName).classList.add("active");
-        evt.currentTarget.classList.add("active");
-    }
-
-    // Chart Integrations
     window.onload = function() {
-        
-        // 0. Hero Chart: TTM Revenue Growth Line Chart
-        const ctxHero = document.getElementById('heroChart').getContext('2d');
-        new Chart(ctxHero, {
-            type: 'line',
-            data: {
-                labels: ['FY 2016', 'FY 2017', 'FY 2018', 'FY 2019', 'FY 2020', 'FY 2021', 'FY 2022', 'FY 2023', 'FY 2024', 'FY 2025'],
-                datasets: [{
-                    label: 'TTM Revenue (Mil Yen)',
-                    data: [539657, 540097, 560087, 580141, 580109, 572757, 602696, 662204, 680091, 702080],
-                    borderColor: '#10b981', // Emerald green
-                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                    borderWidth: 3,
-                    fill: true,
-                    tension: 0.4, // smooth curves
-                    pointBackgroundColor: '#050505',
-                    pointBorderColor: '#10b981',
-                    pointBorderWidth: 2,
-                    pointRadius: 4,
-                    pointHoverRadius: 6
-                }]
-            },
-            options: {
-                responsive: true, 
-                maintainAspectRatio: false,
-                scales: { 
-                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
-                    x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
-                },
-                plugins: { 
-                    legend: { display: true, labels: { color: '#cbd5e1' } },
-                    tooltip: { mode: 'index', intersect: false }
-                },
-                interaction: { mode: 'nearest', axis: 'x', intersect: false }
-            }
-        });
+        Chart.defaults.color = '#94a3b8';
+        Chart.defaults.borderColor = 'rgba(255,255,255,0.05)';
 
-        // 1. Doughnut Chart for Segments (Revenue)
+        // 1. Segment Pie Chart
         const ctxSeg = document.getElementById('segmentChart').getContext('2d');
         new Chart(ctxSeg, {
             type: 'doughnut',
@@ -324,70 +210,122 @@
                 datasets: [{
                     data: [41.38, 36.61, 11.64, 8.76, 0.64],
                     backgroundColor: ['#10b981', '#38bdf8', '#8b5cf6', '#f43f5e', '#eab308'],
-                    borderWidth: 0, hoverOffset: 4
+                    borderWidth: 0
                 }]
             },
-            options: { plugins: { legend: { position: 'right', labels: { color: '#cbd5e1' } } } }
-        });
-
-        // 2. Bar Chart for Segment Margins
-        const ctxMargin = document.getElementById('marginChart').getContext('2d');
-        new Chart(ctxMargin, {
-            type: 'bar',
-            data: {
-                labels: ['Real Estate', 'Logistics', 'Processed Food', 'Fisheries', 'Livestock'],
-                datasets: [{
-                    label: 'Operating Margin (%)',
-                    data: [37.16, 6.15, 5.99, 1.56, 1.27],
-                    backgroundColor: ['#eab308', '#38bdf8', '#10b981', '#f43f5e', '#8b5cf6'],
-                    borderRadius: 4
-                }]
-            },
-            options: {
-                responsive: true, maintainAspectRatio: false,
-                scales: { 
-                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
-                    x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
-                },
-                plugins: { legend: { display: false } }
+            options: { 
+                maintainAspectRatio: false,
+                plugins: { 
+                    legend: { position: 'right' },
+                    tooltip: {
+                        callbacks: {
+                            afterLabel: function(context) {
+                                const margins = {'Processed Food': '5.99%', 'Logistics': '6.15%', 'Livestock': '1.27%', 'Fisheries': '1.56%', 'Real Estate': '37.16%'};
+                                return 'EBIT Margin: ' + margins[context.label];
+                            }
+                        }
+                    }
+                } 
             }
         });
 
-        // 3. Stacked Bar Chart for Capital Allocation
-        const ctxCap = document.getElementById('capAllocChart').getContext('2d');
+        // 2. Revenue Chart
+        const ctxRev = document.getElementById('revenueChart').getContext('2d');
+        new Chart(ctxRev, {
+            type: 'line',
+            data: {
+                labels: ['2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025'],
+                datasets: [{
+                    label: 'TTM Revenue (Mil Yen)',
+                    data: [539657, 540097, 560087, 580141, 580109, 572757, 602696, 662204, 680091, 702080],
+                    borderColor: '#38bdf8', backgroundColor: 'rgba(56, 189, 248, 0.1)',
+                    borderWidth: 3, fill: true, tension: 0.4,
+                    pointBackgroundColor: '#050505', pointBorderColor: '#38bdf8'
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+
+        // 3. CFO Chart
+        const ctxCfo = document.getElementById('cfoChart').getContext('2d');
+        new Chart(ctxCfo, {
+            type: 'bar',
+            data: {
+                labels: ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025'],
+                datasets: [{
+                    label: 'Cash from Operations (Mil Yen)',
+                    data: [27803, 37032, 40828, 29859, 31311, 39441, 45453, 34660, 37865, 62442, 53194],
+                    backgroundColor: '#10b981', borderRadius: 4
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+
+        // 4. Dividend Chart
+        const ctxDiv = document.getElementById('dividendChart').getContext('2d');
+        new Chart(ctxDiv, {
+            type: 'line',
+            data: {
+                labels: ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025'],
+                datasets: [{
+                    label: 'Dividends Paid',
+                    data: [2853, 3138, 3353, 4192, 4125, 4923, 5722, 7053, 6595, 8034, 9949],
+                    borderColor: '#f43f5e', borderWidth: 3, tension: 0.3, pointBackgroundColor: '#f43f5e'
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+
+        // 5. Buybacks Chart
+        const ctxBuy = document.getElementById('buybackChart').getContext('2d');
+        new Chart(ctxBuy, {
+            type: 'bar',
+            data: {
+                labels: ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025'],
+                datasets: [{
+                    label: 'Share Buybacks',
+                    data: [21, 1049, 9093, 14016, 10, 18, 7, 10012, 5009, 10, 10010],
+                    backgroundColor: '#8b5cf6', borderRadius: 4
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+
+        // 6. Capex vs Shareholder Return Chart
+        const ctxCap = document.getElementById('capexChart').getContext('2d');
         new Chart(ctxCap, {
             type: 'bar',
             data: {
-                labels: ['2021', '2022', '2023', '2024', '2025 (Est)'],
+                labels: ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025'],
                 datasets: [
                     {
-                        label: 'Cash from Ops',
-                        data: [45453, 34660, 37865, 62442, 53194],
-                        backgroundColor: '#10b981',
-                        stack: 'Stack 0'
+                        label: 'Capital Expenditures',
+                        data: [20588, 12530, 8963, 15993, 20062, 20369, 28529, 21289, 23830, 26726, 28328],
+                        backgroundColor: '#eab308', borderRadius: 4
                     },
                     {
-                        label: 'CapEx (Outflow)',
-                        data: [-28529, -21289, -23830, -26726, -28328],
-                        backgroundColor: '#f43f5e',
-                        stack: 'Stack 0'
-                    },
-                    {
-                        label: 'Share Buybacks (Outflow)',
-                        data: [-7, -10012, -5009, -10, -10010],
-                        backgroundColor: '#8b5cf6',
-                        stack: 'Stack 0'
+                        label: 'Total Shareholder Return (Div + Buyback)',
+                        data: [2874, 4187, 12446, 18208, 4135, 4941, 5729, 17065, 11604, 8044, 19959],
+                        backgroundColor: '#38bdf8', borderRadius: 4
                     }
                 ]
             },
-            options: {
-                responsive: true, maintainAspectRatio: false,
-                scales: { 
-                    y: { stacked: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
-                    x: { stacked: true, grid: { display: false }, ticks: { color: '#94a3b8' } }
-                },
-                plugins: { legend: { labels: { color: '#cbd5e1' } } }
-            }
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+
+        // 7. Balance Sheet Chart
+        const ctxBal = document.getElementById('balanceChart').getContext('2d');
+        new Chart(ctxBal, {
+            type: 'bar',
+            data: {
+                labels: ['Current Assets', 'Current Liabilities', 'Total Liabilities'],
+                datasets: [{
+                    label: 'Millions of Yen',
+                    data: [204925, 129000, 239098],
+                    backgroundColor: ['#10b981', '#f43f5e', '#8b5cf6'], borderRadius: 4
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
         });
     }
 
@@ -414,10 +352,7 @@
             ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
         }
     }
-    function init() {
-        particlesArray = [];
-        for (let i = 0; i < 80; i++) { particlesArray.push(new Particle()); }
-    }
+    function init() { particlesArray = []; for (let i = 0; i < 80; i++) particlesArray.push(new Particle()); }
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         for (let i = 0; i < particlesArray.length; i++) {
