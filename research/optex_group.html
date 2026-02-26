@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPTEX GROUP (6914.T) - Equity Research</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #cbd5e1;
+            background-color: #050505;
+            margin: 0;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #dataNetwork { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.6; }
+
+        /* Navigation */
+        .btn-back {
+            padding: 10px 20px;
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border: 1px solid #10b981;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+            margin-bottom: 30px;
+            align-self: flex-start;
+            margin-left: max(0px, calc(50vw - 475px));
+        }
+        .btn-back:hover { background: #10b981; color: #050505; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+
+        /* Main Report Block */
+        .report-block {
+            background: rgba(20, 25, 35, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px; 
+            width: 100%;
+            max-width: 950px;
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        /* Typography */
+        h1 { color: #10b981; font-size: 2.2em; margin-top: 0; margin-bottom: 5px; } 
+        h2 { color: #38bdf8; margin-top: 40px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; font-size: 1.6em; }
+        h3 { color: #f8fafc; margin-top: 20px; font-size: 1.3em; }
+        .sub-header { color: #94a3b8; font-family: monospace; margin-bottom: 30px; font-size: 1.1em; }
+        p, li { font-size: 1.05em; color: #cbd5e1; margin-bottom: 20px; }
+
+        /* Key Metrics Banner */
+        .metrics-banner {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        .metric-card {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        .metric-title { font-size: 0.75em; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
+        .metric-value { font-size: 1.5em; font-weight: bold; color: #f8fafc; margin-top: 5px; }
+        .metric-value.pos { color: #10b981; }
+
+        /* Layout Grids */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 20px; align-items: start; }
+
+        /* Segment Cards */
+        .segment-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: transform 0.2s;
+            height: calc(100% - 15px);
+        }
+        .segment-card:hover { transform: translateY(-2px); border-color: rgba(56, 189, 248, 0.4); }
+        .segment-card h4 { margin-top: 0; color: #f8fafc; font-size: 1.1em; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; }
+        .segment-card p { font-size: 0.95em; margin-bottom: 0; color: #94a3b8; }
+
+        /* Highlight Boxes */
+        .thesis-box {
+            background: rgba(56, 189, 248, 0.05);
+            border-left: 4px solid #38bdf8;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .risk-box {
+            background: rgba(244, 63, 94, 0.05);
+            border-left: 4px solid #f43f5e;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .conclusion-box {
+            background: rgba(16, 185, 129, 0.08);
+            border: 2px solid #10b981;
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
+        }
+        .conclusion-box h3 { color: #10b981; margin-top: 0; font-size: 1.5em; border: none; }
+
+        /* Chart & Math Containers */
+        .chart-box {
+            background: rgba(0,0,0,0.3); 
+            border-radius: 8px; 
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        .chart-center-large {
+            height: 450px;
+            max-width: 700px;
+            margin: 0 auto 40px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .chart-tall { height: 350px; }
+        .chart-short { height: 280px; }
+        
+        .math-formula {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 1.4em;
+            text-align: center;
+            background: rgba(0,0,0,0.4);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            color: #f8fafc;
+        }
+        .fraction {
+            display: inline-block;
+            vertical-align: middle;
+            text-align: center;
+            margin: 0 0.2em;
+        }
+        .numerator { border-bottom: 1px solid #f8fafc; padding-bottom: 2px; }
+        .denominator { padding-top: 2px; }
+
+        /* Data Table */
+        .dcf-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
+        .dcf-table th, .dcf-table td {
+            padding: 10px;
+            text-align: right;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .dcf-table th { color: #38bdf8; text-transform: uppercase; font-size: 0.8em; }
+        .dcf-table td:first-child, .dcf-table th:first-child { text-align: left; font-weight: bold; color: #f8fafc;}
+
+        /* MOBILE RESPONSIVE STYLES */
+        @media (max-width: 768px) {
+            body { padding: 20px 15px; }
+            .btn-back { margin-left: 0; padding: 8px 16px; font-size: 0.9em; margin-bottom: 20px; }
+            .report-block { padding: 25px 20px; border-radius: 12px; }
+            h1 { font-size: 1.6em; margin-bottom: 8px; }
+            h2 { font-size: 1.3em; margin-top: 30px; }
+            .metrics-banner { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .grid-2 { grid-template-columns: 1fr; gap: 20px; }
+            .chart-center-large { height: 300px; }
+            .chart-tall { height: 280px; }
+            .chart-short { height: 220px; }
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="dataNetwork"></canvas>
+
+<a href="../stock-research.html" class="btn-back">← Back to Equity Research</a>
+
+<div class="report-block">
+    <h1>OPTEX GROUP Co. (オプテックスグループ株式会社)</h1>
+    <div class="sub-header">TSE: 6914 | Fiscal Year: Jan 1 - Dec 31</div>
+
+    <div class="metrics-banner">
+        <div class="metric-card">
+            <div class="metric-title">Market Cap</div>
+            <div class="metric-value">¥116.79B</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-title">FCF Yield</div>
+            <div class="metric-value">5.33%</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-title">P/E Ratio</div>
+            <div class="metric-value">15.21</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-title">Dividend Payout</div>
+            <div class="metric-value pos">35%</div>
+        </div>
+    </div>
+
+    <h2>Business Overview & Segment Analysis</h2>
+    <p>OPTEX GROUP (OPtical Technology X (for an unknown future)) is a highly specialized manufacturer of sensor technologies. The business is heavily diversified across specific industrial niches within two primary segments: Industrial Automations (51% of revenue) and Sensing Solutions (47% of revenue).</p>
+
+    <div class="chart-box chart-center-large">
+        <canvas id="segmentChart"></canvas>
+    </div>
+
+    <div class="grid-2">
+        <div style="display: flex; flex-direction: column;">
+            <h3 style="text-align: center; color: #10b981;">Industrial Automations (IA) - 51%</h3>
+            
+            <div class="segment-card">
+                <h4>Inspection Lighting (22%)</h4>
+                <p>Lighting solutions for factory robots and cameras, ensuring products are illuminated for precise visual inspection. Growing robustly alongside solid-state batteries and electronics production.</p>
+            </div>
+            
+            <div class="segment-card">
+                <h4>Factory Automation (14%)</h4>
+                <p>Sensors ensuring products move smoothly along the assembly line. Highly exposed to the semiconductor industry, utilizing laser technology to measure lengths with extreme precision.</p>
+            </div>
+
+            <div class="segment-card">
+                <h4>Automation Systems (8%)</h4>
+                <p>Advanced factory machinery including high-speed filling equipment, visual inspection systems, and battery manufacturing equipment. Currently facing headwinds due to lower EV battery demand.</p>
+            </div>
+            
+            <div class="segment-card">
+                <h4>Industrial PCs (7%)</h4>
+                <p>Specialized computers engineered specifically for factory machinery and harsh industrial environments. Expected to recover from a 2025 slump driven by broad automation demand.</p>
+            </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column;">
+            <h3 style="text-align: center; color: #38bdf8;">Sensing Solution (SS) - 47%</h3>
+            
+            <div class="segment-card">
+                <h4>Security Sensors (30%)</h4>
+                <p>Utilized in residential properties (low/high-end) and commercial infrastructure like data centers, airports, and military facilities. Employs PIR (Passive Infrared), AIR (Active Infrared) functioning as invisible tripwires, Radar, and LiDAR technology built for robust outdoor facility security.</p>
+            </div>
+            
+            <div class="segment-card">
+                <h4>Automatic Door Sensors (11%)</h4>
+                <p>Used in essentially all large buildings to preserve heat (lowering energy costs) and provide immediate security. Demand is increasing across North America and Europe.</p>
+            </div>
+            
+            <div class="segment-card">
+                <h4>Social and Environmental (6%)</h4>
+                <p>Sensors for public infrastructure and business optimization. Includes vehicle detection sensors (growing alongside self-driving tech), people counting systems for retail foot traffic, and water quality sensors.</p>
+            </div>
+        </div>
+    </div>
+    
+    
+
+    <div class="thesis-box" style="margin-top: 40px;">
+        <p><strong>The Monopoly Moat:</strong> OPTEX commands a massive 40% global share of the outdoor intrusion detector market. They hold a 30% share in automatic doors (having invented the very first one!) and a 30% share in LED inspection lighting. These deep competitive moats grant them incredible pricing power.</p>
+    </div>
+
+    <h2>Financial Trajectory & 2028 Targets</h2>
+    <p>Management aims to achieve an operating margin of 15% or higher by FY2030. They forecast consolidated net sales scaling from ¥65.8 billion in FY2025 to ¥80.0 billion by FY2028. Correspondingly, consolidated operating profit is projected to jump from ¥8.1 billion to ¥11.5 billion over the same period.</p>
+    
+    <div class="chart-box chart-tall">
+        <canvas id="revenueTargetChart"></canvas>
+    </div>
+
+    <h2>The Fortress Balance Sheet & The TSE Catalyst</h2>
+    <p>OPTEX currently holds roughly ¥22,884M in cash against only ¥34M in Accounts Payable and ¥21,173M in inventory. Against this cash pile, their current portion of long-term debt is merely ¥848M, and total long-term debt sits at just ¥5,048M. They have enough cash on hand to pay off all liabilities as it stands.</p>
+    
+    <div class="chart-box chart-short" style="display: flex; justify-content: center; align-items: center;">
+        <canvas id="balanceChart"></canvas>
+    </div>
+
+    <p>Recent corporate governance pressures from the Tokyo Stock Exchange (TSE), coupled with the return of inflation in Japan, mean companies can no longer hoard cash. They will likely be forced to deploy this capital efficiently—whether into M&A or massive shareholder returns—acting as a significant upside catalyst.</p>
+
+    <h2>Adjusted Valuation: The Net Income DCF Model</h2>
+    <p>OPTEX exhibits highly volatile Free Cash Flow (FCF), plunging to ¥522M in FY2022 before rocketing to ¥6,224M by FY2025. Due to these massive CapEx swings, applying a traditional FCF growth rate breaks the mathematical logic of a standard valuation.</p>
+    
+    <p>A traditional DCF model calculates Present Value using the following formula:</p>
+    
+    <div class="math-formula">
+        PV = &Sigma; 
+        <div class="fraction">
+            <div class="numerator">Cash Flow<sub>t</sub></div>
+            <div class="denominator">(1 + r)<sup>t</sup></div>
+        </div>
+        + 
+        <div class="fraction">
+            <div class="numerator">Terminal Value</div>
+            <div class="denominator">(1 + r)<sup>n</sup></div>
+        </div>
+    </div>
+
+    <p>To find a highly accurate intrinsic value, we pivot to a <strong>Net Income DCF Model</strong>. This smooths out the severe cyclical capital expenditure swings required to build new sensor manufacturing facilities.</p>
+    
+    <h3>Net Income Projection & Discounting (Base JPY Millions)</h3>
+    <table class="dcf-table">
+        <thead>
+            <tr>
+                <th>Year</th>
+                <th>Projected Net Income</th>
+                <th>Discount Factor (10%)</th>
+                <th>Present Value (PV)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Year 1</td><td>¥5,940</td><td>0.909</td><td>¥5,400</td></tr>
+            <tr><td>Year 2</td><td>¥6,415</td><td>0.826</td><td>¥5,301</td></tr>
+            <tr><td>Year 3</td><td>¥6,928</td><td>0.751</td><td>¥5,205</td></tr>
+            <tr><td>Year 4</td><td>¥7,482</td><td>0.683</td><td>¥5,110</td></tr>
+            <tr><td>Year 5</td><td>¥8,081</td><td>0.621</td><td>¥5,016</td></tr>
+        </tbody>
+    </table>
+
+    <div class="grid-2" style="align-items: center;">
+        <div class="chart-box chart-short" style="display: flex; justify-content: center; align-items: center; margin-bottom: 0;">
+            <canvas id="dcfChart"></canvas>
+        </div>
+        <div>
+            <ul style="list-style-type: none; padding: 0;">
+                <li><strong style="color: #38bdf8;">Sum of PV (Years 1-5):</strong> ¥26,032M</li>
+                <li><strong style="color: #38bdf8;">Terminal Value (Y5 NI * 15x):</strong> ¥121,215M</li>
+                <li><strong style="color: #38bdf8;">PV of Terminal Value:</strong> ¥75,242M</li>
+                <li><strong style="color: #10b981;">Total Enterprise Value:</strong> ¥101,274M</li>
+                <li><strong style="color: #f59e0b;">Net Cash (Cash - Debt):</strong> + ¥17,836M</li>
+                <li style="font-size: 1.2em; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;"><strong style="color: #f8fafc;">Implied Equity Value:</strong> ¥119.1 Billion</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2>Key Risks</h2>
+    <div class="risk-box">
+        <ol>
+            <li style="margin-bottom: 10px;"><strong>EV Market Slowdown:</strong> The Automation Systems sub-segment (8% of revenue) faces uncertain, potentially negative growth due to softening demand for EV battery manufacturing. Management expects a significant reduction in this segment's impact.</li>
+            <li><strong>Cyclical Hardware Exposure:</strong> Industrial PCs (7%) experienced a significant slump in 2025. While management anticipates a recovery driven by automation demand, the segment remains highly sensitive to broader macro-industrial cycles.</li>
+        </ol>
+    </div>
+
+    <div class="conclusion-box">
+        <h3>Final Conclusion</h3>
+        <p style="margin-bottom: 0;">With a current Market Cap of roughly <strong>¥116.79 Billion</strong> and an implied Equity Value of <strong>¥119.1 Billion</strong>, the market is pricing OPTEX extremely rationally based strictly on moderate Net Income growth. However, if management achieves their aggressive 15% margin targets by 2030 or successfully deploys their massive cash pile into shareholder returns due to TSE pressure, there is a substantial margin of safety and significant upside potential currently ignored by the broader market.</p>
+    </div>
+
+</div>
+
+<script>
+    window.onload = function() {
+        Chart.defaults.color = '#94a3b8';
+        Chart.defaults.borderColor = 'rgba(255,255,255,0.05)';
+
+        // 1. Segment Chart (Doughnut)
+        const ctxSeg = document.getElementById('segmentChart').getContext('2d');
+        new Chart(ctxSeg, {
+            type: 'doughnut',
+            data: {
+                labels: ['Security Sensors (30%)', 'Inspection Lighting (22%)', 'Factory Auto (14%)', 'Auto Doors (11%)', 'Auto Systems (8%)', 'Ind PCs (7%)', 'Social/Env (6%)'],
+                datasets: [{
+                    data: [30, 22, 14, 11, 8, 7, 6],
+                    backgroundColor: ['#38bdf8', '#10b981', '#059669', '#0ea5e9', '#f43f5e', '#f59e0b', '#8b5cf6'],
+                    borderWidth: 2,
+                    borderColor: '#050505',
+                    hoverOffset: 10
+                }]
+            },
+            options: { 
+                maintainAspectRatio: false, 
+                cutout: '60%',
+                plugins: { 
+                    legend: { 
+                        position: 'right', 
+                        labels: { boxWidth: 15, color: '#cbd5e1', font: { size: 14 } } 
+                    } 
+                } 
+            }
+        });
+
+        // 2. Revenue Targets Chart (Bar/Line)
+        const ctxRevTarget = document.getElementById('revenueTargetChart').getContext('2d');
+        new Chart(ctxRevTarget, {
+            type: 'bar',
+            data: {
+                labels: ['FY2025', 'FY2026', 'FY2027', 'FY2028'],
+                datasets: [
+                    {
+                        type: 'line',
+                        label: 'Net Sales Trend',
+                        data: [65.8, 69.0, 75.0, 80.0],
+                        borderColor: '#10b981', borderWidth: 3, tension: 0.3, fill: false
+                    },
+                    {
+                        type: 'bar',
+                        label: 'Target Net Sales (Billion Yen)',
+                        data: [65.8, 69.0, 75.0, 80.0],
+                        backgroundColor: 'rgba(56, 189, 248, 0.7)', borderRadius: 4
+                    }
+                ]
+            },
+            options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 50 } } }
+        });
+
+        // 3. Balance Sheet Visual (Horizontal Bar)
+        const ctxBal = document.getElementById('balanceChart').getContext('2d');
+        new Chart(ctxBal, {
+            type: 'bar',
+            indexAxis: 'y',
+            data: {
+                labels: ['Cash', 'Current Liabilities', 'Long-Term Debt'],
+                datasets: [{
+                    label: 'Millions of Yen',
+                    data: [22884, 15554, 5048],
+                    backgroundColor: ['#10b981', '#f43f5e', '#8b5cf6'],
+                    borderRadius: 4
+                }]
+            },
+            options: { 
+                responsive: true, maintainAspectRatio: false, 
+                plugins: { legend: { display: false }, title: {display: true, text: 'The Fortress Balance Sheet (M JPY)', color: '#f8fafc'} } 
+            }
+        });
+
+        // 4. DCF Projection Chart (Bar)
+        const ctxDcf = document.getElementById('dcfChart').getContext('2d');
+        new Chart(ctxDcf, {
+            type: 'bar',
+            data: {
+                labels: ['Y1', 'Y2', 'Y3', 'Y4', 'Y5'],
+                datasets: [
+                    {
+                        label: 'Projected Net Income',
+                        data: [5940, 6415, 6928, 7482, 8081],
+                        backgroundColor: 'rgba(56, 189, 248, 0.8)', borderRadius: 4
+                    },
+                    {
+                        label: 'Discounted Present Value',
+                        data: [5400, 5301, 5205, 5110, 5016],
+                        backgroundColor: 'rgba(16, 185, 129, 0.8)', borderRadius: 4
+                    }
+                ]
+            },
+            options: { 
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false }, title: {display: true, text: 'Net Income vs PV (M JPY)', color: '#f8fafc'} }
+            }
+        });
+    }
+
+    // --- Flying Blue/Green Background Script ---
+    const canvas = document.getElementById("dataNetwork");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    let particlesArray = [];
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2 + 1;
+            this.speedX = Math.random() * 0.8 - 0.4;
+            this.speedY = Math.random() * 0.8 - 0.4;
+        }
+        update() {
+            this.x += this.speedX; this.y += this.speedY;
+            if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+            if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+        }
+        draw() {
+            ctx.fillStyle = 'rgba(56, 189, 248, 0.9)'; 
+            ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
+        }
+    }
+    function init() { particlesArray = []; for (let i = 0; i < 80; i++) particlesArray.push(new Particle()); }
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < particlesArray.length; i++) {
+            particlesArray[i].update(); particlesArray[i].draw();
+            for (let j = i; j < particlesArray.length; j++) {
+                const dx = particlesArray[i].x - particlesArray[j].x;
+                const dy = particlesArray[i].y - particlesArray[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                if (distance < 140) {
+                    ctx.beginPath();
+                    ctx.strokeStyle = `rgba(16, 185, 129, ${0.8 - distance/140})`;
+                    ctx.lineWidth = 1.2;
+                    ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
+                    ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
+                    ctx.stroke();
+                }
+            }
+        }
+        requestAnimationFrame(animate);
+    }
+    window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; init(); });
+    init(); animate();
+</script>
+
+</body>
+</html>
