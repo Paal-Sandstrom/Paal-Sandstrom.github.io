@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resume - Pål Sandström</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         * { box-sizing: border-box; }
         body {
@@ -52,12 +53,23 @@
             padding-bottom: 20px;
             margin-bottom: 30px;
         }
-        h1 { margin: 0; color: #f8fafc; font-size: 2.5em; letter-spacing: 1px; }
-        .contact-info p { margin: 4px 0; font-size: 0.95em; color: #94a3b8; }
+        h1 { margin: 0 0 15px 0; color: #f8fafc; font-size: 2.5em; letter-spacing: 1px; }
+        
+        /* Updated Contact Info for Icons */
+        .contact-info { display: flex; flex-direction: column; gap: 8px; }
+        .contact-info p { 
+            margin: 0; 
+            font-size: 0.95em; 
+            color: #94a3b8; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+        }
+        .contact-info i { width: 18px; height: 18px; color: #10b981; }
         .contact-info a { color: #38bdf8; text-decoration: none; transition: color 0.2s; }
         .contact-info a:hover { color: #10b981; }
         
-        /* Language Toggle Button */
+        /* Language Toggle Button with Flexbox for Icon */
         .toggle-btn {
             background: rgba(16, 185, 129, 0.1);
             color: #10b981;
@@ -68,7 +80,11 @@
             font-weight: bold;
             transition: all 0.3s ease;
             box-shadow: 0 0 10px rgba(16, 185, 129, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
+        .toggle-btn i { width: 18px; height: 18px; }
         .toggle-btn:hover { 
             background: #10b981; 
             color: #050505;
@@ -96,7 +112,9 @@
         /* Navigation */
         .nav-bottom { margin-top: 50px; text-align: center; }
         .btn-back {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             padding: 12px 24px;
             background: linear-gradient(135deg, #2563eb, #1d4ed8);
             color: #ffffff;
@@ -105,6 +123,7 @@
             font-weight: bold;
             transition: all 0.3s ease;
         }
+        .btn-back i { width: 20px; height: 20px; }
         .btn-back:hover { box-shadow: 0 0 15px rgba(37, 99, 235, 0.5); transform: translateY(-2px); }
 
         /* Language Classes - Swedish is hidden by default */
@@ -127,13 +146,15 @@
         <div>
             <h1>Pål Sandström</h1>
             <div class="contact-info">
-                <p>📍 Magistratsvägen 55B, Lund, Sweden</p>
-                <p>📧 <a href="mailto:paulsanmat@gmail.com">paulsanmat@gmail.com</a></p>
-                <p>📞 +46 72 233 2622</p>
-                <p>🔗 <a href="https://www.linkedin.com/in/pål-sandström" target="_blank">LinkedIn Profile</a></p>
+                <p><i data-lucide="map-pin"></i> Magistratsvägen 55B, Lund, Sweden</p>
+                <p><i data-lucide="mail"></i> <a href="mailto:paulsanmat@gmail.com">paulsanmat@gmail.com</a></p>
+                <p><i data-lucide="phone"></i> +46 72 233 2622</p>
+                <p><i data-lucide="linkedin"></i> <a href="https://www.linkedin.com/in/pål-sandström" target="_blank">LinkedIn Profile</a></p>
             </div>
         </div>
-        <button class="toggle-btn" onclick="toggleLanguage()">🇸🇪 Byt till Svenska</button>
+        <button class="toggle-btn" onclick="toggleLanguage()">
+            <i data-lucide="globe"></i> <span id="langBtnText">Byt till Svenska</span>
+        </button>
     </div>
 
     <div class="lang-en">
@@ -271,7 +292,7 @@
     </div>
     
     <div class="nav-bottom">
-        <a href="index.html" class="btn-back">← Back to Main Hub</a>
+        <a href="index.html" class="btn-back"><i data-lucide="arrow-left"></i> Back to Main Hub</a>
     </div>
 </div>
 
@@ -282,17 +303,17 @@
     function toggleLanguage() {
         const enElements = document.querySelectorAll('.lang-en');
         const svElements = document.querySelectorAll('.lang-sv');
-        const btn = document.querySelector('.toggle-btn');
+        const btnText = document.getElementById('langBtnText'); // Targeting just the text span
 
         if (currentLang === 'en') {
             enElements.forEach(el => el.style.display = 'none');
             svElements.forEach(el => el.style.display = 'block');
-            btn.innerHTML = '🇬🇧 Switch to English';
+            btnText.innerText = 'Switch to English';
             currentLang = 'sv';
         } else {
             enElements.forEach(el => el.style.display = 'block');
             svElements.forEach(el => el.style.display = 'none');
-            btn.innerHTML = '🇸🇪 Byt till Svenska';
+            btnText.innerText = 'Byt till Svenska';
             currentLang = 'en';
         }
     }
@@ -365,6 +386,9 @@
 
     init();
     animate();
+
+    // 3. Initialize Lucide Icons
+    lucide.createIcons();
 </script>
 
 </body>
