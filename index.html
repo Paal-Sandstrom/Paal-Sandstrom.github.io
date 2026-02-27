@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pål Sandström</title>
     <link rel="icon" type="image/png" href="images/favicon.png">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         * { box-sizing: border-box; }
         body {
@@ -174,8 +175,23 @@
 
         /* Social Links */
         .social-links { margin-top: 25px; }
-        .social-links a { color: #94a3b8; text-decoration: none; display: block; margin: 10px 0; font-size: 1.05em; transition: color 0.3s; }
+        
+        /* Updated display properties to align the new icons beautifully */
+        .social-links a { 
+            color: #94a3b8; 
+            text-decoration: none; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 8px; 
+            margin: 10px 0; 
+            font-size: 1.05em; 
+            transition: color 0.3s; 
+        }
         .social-links a:hover { color: #10b981; }
+        
+        /* Optional: adjust icon size slightly */
+        .social-links i { width: 20px; height: 20px; }
     </style>
 </head>
 <body>
@@ -190,9 +206,9 @@
         <p class="subtitle">Economics Student @ Lund University</p>
         
         <div class="social-links">
-            <a href="mailto:paulsanmat@gmail.com">📧 paulsanmat@gmail.com</a>
-            <a href="https://www.linkedin.com/in/pål-sandström" target="_blank">💼 LinkedIn Profile</a>
-            <a href="#">📍 Lund, Sweden</a>
+            <a href="mailto:paulsanmat@gmail.com"><i data-lucide="mail"></i> paulsanmat@gmail.com</a>
+            <a href="https://www.linkedin.com/in/pål-sandström" target="_blank"><i data-lucide="linkedin"></i> LinkedIn Profile</a>
+            <a href="#"><i data-lucide="map-pin"></i> Lund, Sweden</a>
         </div>
     </div>
 
@@ -369,6 +385,9 @@
 
     init();
     animate();
+
+    // --- 3. INITIALIZE LUCIDE ICONS ---
+    lucide.createIcons();
 </script>
 
 </body>
