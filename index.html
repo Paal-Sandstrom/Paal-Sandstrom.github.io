@@ -63,21 +63,23 @@
         .panel-profile { grid-column: span 1; text-align: center; }
         .panel-bio { grid-column: span 2; display: flex; flex-direction: column; justify-content: center;}
         
-        /* Terminal Styling */
-        .panel-terminal { 
-            grid-column: span 2; 
-            background-color: rgba(10, 10, 15, 0.9); 
-            border-left: 4px solid #10b981; 
-            min-height: 250px; 
-            display: flex;
-            flex-direction: column;
+        /* Links Action Bar at the Bottom */
+        .panel-links { 
+            grid-column: span 3; 
+            display: flex; 
+            flex-direction: row; 
+            gap: 25px; 
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
         }
-        .panel-links { grid-column: span 1; display: flex; flex-direction: column; gap: 15px; justify-content: center;}
 
         /* Mobile Responsiveness */
         @media (max-width: 900px) {
             .bento-grid { grid-template-columns: 1fr; }
-            .panel-profile, .panel-bio, .panel-terminal, .panel-links { grid-column: span 1; }
+            .panel-profile, .panel-bio, .panel-links { grid-column: span 1; }
+            .panel-links { flex-direction: column; width: 100%; }
+            .panel-links .btn { width: 100%; }
         }
 
         /* Profile Elements */
@@ -117,44 +119,6 @@
             padding-left: 15px;
             margin-bottom: 20px;
         }
-        
-        /* Interactive Terminal Specifics */
-        .terminal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 10px;
-        }
-        .terminal-dots { display: flex; gap: 8px; }
-        .dot { width: 12px; height: 12px; border-radius: 50%; }
-        .dot-red { background-color: #ff5f56; }
-        .dot-yellow { background-color: #ffbd2e; }
-        .dot-green { background-color: #27c93f; }
-        
-        /* Terminal Controls */
-        .terminal-nav { display: flex; align-items: center; gap: 15px; }
-        .terminal-nav button {
-            background: none;
-            border: 1px solid #38bdf8;
-            color: #38bdf8;
-            cursor: pointer;
-            border-radius: 4px;
-            font-weight: bold;
-            padding: 2px 10px;
-            transition: all 0.2s;
-        }
-        .terminal-nav button:hover { background: #38bdf8; color: #000; }
-        .slide-indicator { color: #64748b; font-family: monospace; font-size: 0.9em; }
-
-        /* Terminal Text output */
-        .terminal-body { flex-grow: 1; display: flex; flex-direction: column; }
-        .terminal-cmd { font-family: 'Courier New', Courier, monospace; color: #38bdf8; font-size: 1.05em; margin-bottom: 15px; min-height: 24px; }
-        .terminal-out { font-family: 'Courier New', Courier, monospace; color: #e2e8f0; font-size: 1em; opacity: 0; transition: opacity 0.3s ease; }
-        .terminal-out .highlight { color: #10b981; font-weight: bold; }
-        .terminal-out ul { margin-top: 5px; padding-left: 20px; color: #94a3b8; }
-        .terminal-out li { margin-bottom: 4px; }
 
         /* Buttons */
         .btn {
@@ -168,6 +132,7 @@
             font-weight: bold;
             transition: all 0.3s ease;
             font-size: 1.1em;
+            min-width: 220px;
         }
         .btn:hover { box-shadow: 0 0 15px rgba(37, 99, 235, 0.5); transform: scale(1.02); }
         .btn-secondary { background: transparent; border: 2px solid #10b981; color: #10b981; }
@@ -175,8 +140,6 @@
 
         /* Social Links */
         .social-links { margin-top: 25px; }
-        
-        /* Updated display properties to align the new icons beautifully */
         .social-links a { 
             color: #94a3b8; 
             text-decoration: none; 
@@ -189,8 +152,6 @@
             transition: color 0.3s; 
         }
         .social-links a:hover { color: #10b981; }
-        
-        /* Optional: adjust icon size slightly */
         .social-links i { width: 20px; height: 20px; }
     </style>
 </head>
@@ -224,100 +185,10 @@
         <a href="stock-research.html" class="btn btn-secondary">Stock Research</a>
     </div>
 
-    <div class="bento-panel panel-terminal">
-        <div class="terminal-header">
-            <div class="terminal-dots">
-                <div class="dot dot-red"></div>
-                <div class="dot dot-yellow"></div>
-                <div class="dot dot-green"></div>
-            </div>
-            <div class="terminal-nav">
-                <button id="prevBtn">&lt; Prev</button>
-                <span class="slide-indicator" id="slideIndicator">1 / 6</span>
-                <button id="nextBtn">Next &gt;</button>
-            </div>
-        </div>
-        
-        <div class="terminal-body">
-            <div class="terminal-cmd" id="termCommand"></div>
-            <div class="terminal-out" id="termOutput"></div>
-        </div>
-    </div>
-
 </div>
 
 <script>
-    // --- 1. INTERACTIVE TERMINAL LOGIC ---
-    const cvData = [
-        {
-            cmd: "> fetch --education 'University'",
-            out: "<span class='highlight'>Lund University</span><br>BSc Business and Economics (Int. Business)<br>Sept 2024 - Jun 2027<br>Focus: Accounting, Law, Statistics."
-        },
-        {
-            cmd: "> fetch --education 'High School'",
-            out: "<span class='highlight'>Carmel High School, USA</span><br>Honors Diploma<br>Sept 2020 - May 2024"
-        },
-        {
-            cmd: "> execute startup.sh --project 'Silkroad'",
-            out: "<span class='highlight'>Founder @ Silkroad (E-commerce)</span><br>Sept 2024 - Mar 2025<br><ul><li>Designed and managed e-commerce platform</li><li>Ensured corporate/tax compliance in Sweden</li><li>Created digital marketing materials</li></ul>"
-        },
-        {
-            cmd: "> load_experience --role 'Lifeguard'",
-            out: "<span class='highlight'>Aquatic Management of Indianapolis</span><br>May 2023 - Sept 2023<br><ul><li>Managed hazardous situations & facility safety</li><li>Calculated and adjusted pool pH/chlorine levels</li></ul>"
-        },
-        {
-            cmd: "> import skills",
-            out: "<span class='highlight'>Data & Tech:</span> Python (Pandas, NumPy), Excel (Advanced Formulas, Modeling)<br><br><span class='highlight'>Languages:</span> Swedish (Native), English (Native-level), German (Basic)"
-        },
-        {
-            cmd: "> check_certifications",
-            out: "<span class='highlight'>Driver's License:</span> Class B<br>Status: Valid & Ready to drive to the office."
-        }
-    ];
-
-    let currentSlide = 0;
-    let typingTimeout;
-
-    function renderTerminalSlide(index) {
-        clearTimeout(typingTimeout);
-        const cmdEl = document.getElementById('termCommand');
-        const outEl = document.getElementById('termOutput');
-        
-        cmdEl.innerHTML = '';
-        outEl.innerHTML = '';
-        outEl.style.opacity = 0;
-        
-        const textToType = cvData[index].cmd;
-        let charIndex = 0;
-
-        function typeChar() {
-            if (charIndex < textToType.length) {
-                cmdEl.innerHTML += textToType.charAt(charIndex);
-                charIndex++;
-                typingTimeout = setTimeout(typeChar, 35);
-            } else {
-                outEl.innerHTML = cvData[index].out;
-                outEl.style.opacity = 1;
-            }
-        }
-        typeChar();
-        
-        document.getElementById('slideIndicator').innerText = `${index + 1} / ${cvData.length}`;
-    }
-
-    document.getElementById('nextBtn').addEventListener('click', () => {
-        currentSlide = (currentSlide + 1) % cvData.length;
-        renderTerminalSlide(currentSlide);
-    });
-
-    document.getElementById('prevBtn').addEventListener('click', () => {
-        currentSlide = (currentSlide - 1 + cvData.length) % cvData.length;
-        renderTerminalSlide(currentSlide);
-    });
-
-    setTimeout(() => { renderTerminalSlide(0); }, 500);
-
-    // --- 2. ANIMATED DATA NETWORK BACKGROUND ---
+    // --- 1. ANIMATED DATA NETWORK BACKGROUND ---
     const canvas = document.getElementById("dataNetwork");
     const ctx = canvas.getContext("2d");
     canvas.width = window.innerWidth;
@@ -386,7 +257,7 @@
     init();
     animate();
 
-    // --- 3. INITIALIZE LUCIDE ICONS ---
+    // --- 2. INITIALIZE LUCIDE ICONS ---
     lucide.createIcons();
 </script>
 
