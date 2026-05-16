@@ -5,116 +5,183 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Equity Research - Pål Sandström</title>
     <style>
-        /* KEEPING YOUR ORIGINAL DESIGN STYLES */
-        * { box-sizing: border-box; }
+        /* === CLASSIC 2000s RESET & BODY === */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #cbd5e1;
-            background-color: #050505; 
+            font-family: Tahoma, Verdana, Arial, sans-serif;
+            background-color: #EBF3FA; /* Classic pale Windows-esque blue */
+            color: #333333;
             margin: 0;
-            padding: 40px 20px;
-            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* === MAIN WRAPPER (Responsive) === */
+        #container {
+            width: 85%;
+            max-width: 1200px;
+            background-color: #FFFFFF;
+            border: 1px solid #8FABCC;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
             display: flex;
             flex-direction: column;
-            align-items: center;
-            overflow-x: hidden;
+            min-height: 90vh;
         }
 
-        /* Animated Background Canvas */
-        #dataNetwork {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.7; 
-        }
-
-        /* Top Navigation */
-        .nav-header {
-            width: 100%;
-            max-width: 1200px;
+        /* === GLOSSY HEADER === */
+        #header {
+            background: linear-gradient(to bottom, #4A90E2 0%, #003399 100%);
+            border-bottom: 2px solid #002266;
+            padding: 20px;
+            color: #FFFFFF;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid rgba(16, 185, 129, 0.3);
-            z-index: 1;
         }
-        .nav-header h1 { margin: 0; color: #f8fafc; font-size: 2.2em; }
+        .header-title h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: normal;
+            text-shadow: 1px 1px 2px #000000;
+        }
 
-        /* The Nice Looking Back Button */
-        .btn-back {
-            padding: 10px 20px;
-            background: rgba(16, 185, 129, 0.1);
-            color: #10b981;
-            border: 1px solid #10b981;
-            border-radius: 8px;
+        /* === 2000s 3D TACTILE BUTTONS === */
+        .btn-classic {
+            background: linear-gradient(to bottom, #F9F9F9 0%, #E0E0E0 100%);
+            border: 2px outset #FFFFFF;
+            border-bottom-color: #999999;
+            border-right-color: #999999;
+            color: #000000;
+            padding: 8px 16px;
             text-decoration: none;
+            font-family: Tahoma, sans-serif;
+            font-size: 13px;
             font-weight: bold;
-            transition: all 0.3s ease;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
-        .btn-back:hover { 
-            background: #10b981; 
-            color: #050505; 
-            box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); 
+        .btn-classic:active {
+            border: 2px inset #FFFFFF;
+            border-bottom-color: #FFFFFF;
+            border-right-color: #FFFFFF;
+            border-top-color: #999999;
+            border-left-color: #999999;
+            padding: 9px 15px 7px 17px; 
+            background: #E0E0E0;
         }
 
+        /* === CONTENT LAYOUT === */
+        #main-body {
+            padding: 30px;
+            font-size: 14px;
+            line-height: 1.6;
+            flex: 1;
+            background-color: #FFFFFF;
+        }
+
+        /* Classic Grid for Stocks */
         .stock-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-            max-width: 1200px;
-            width: 100%;
-            z-index: 1;
+            gap: 20px;
+            margin-top: 10px;
         }
 
-        /* Individual Stock Card (keeping the hover/blur effect) */
+        /* Classic Stock Card Panel */
         .stock-card {
-            background-color: rgba(20, 25, 35, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 25px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            background-color: #F4F8FC;
+            border: 1px solid #B0C4DE;
+            padding: 15px;
+            text-decoration: none;
+            color: #333333;
             display: flex;
             flex-direction: column;
-            text-decoration: none;
-            color: inherit;
+            transition: background-color 0.2s, border-color 0.2s;
         }
         .stock-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            border-color: #38bdf8;
-            box-shadow: 0 15px 30px rgba(56, 189, 248, 0.2);
-            background-color: rgba(30, 35, 45, 0.8);
+            background-color: #E6F0FA;
+            border-color: #003399;
         }
 
-        .stock-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
-        .stock-name { color: #f8fafc; font-size: 1.4em; font-weight: bold; margin: 0; }
-        .stock-ticker { background: #2563eb; color: white; padding: 3px 8px; border-radius: 6px; font-size: 0.75em; font-family: monospace; }
+        .stock-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-start; 
+            margin-bottom: 10px;
+            border-bottom: 1px dotted #B0C4DE;
+            padding-bottom: 8px;
+        }
+        .stock-name { 
+            color: #003399; 
+            font-size: 16px; 
+            font-weight: bold; 
+            margin: 0; 
+        }
         
-        .stock-info { font-size: 0.9em; color: #94a3b8; margin: 2px 0; display: flex; align-items: center; gap: 8px; }
-        .stock-info span { color: #cbd5e1; }
+        /* Classic Ticker Badge */
+        .stock-ticker { 
+            background: #003399; 
+            color: #FFFFFF; 
+            padding: 2px 6px; 
+            font-size: 11px; 
+            font-family: 'Courier New', Courier, monospace; 
+            border: 1px inset #002266;
+        }
+        
+        .stock-info { 
+            font-size: 13px; 
+            margin: 4px 0; 
+            color: #666666;
+        }
+        .stock-info strong {
+            color: #333333;
+        }
+
+        /* === FOOTER === */
+        #footer {
+            background-color: #F4F8FC;
+            border-top: 1px solid #8FABCC;
+            text-align: center;
+            padding: 10px;
+            font-size: 11px;
+            color: #666666;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            #header { flex-direction: column; gap: 15px; text-align: center; }
+            #container { width: 95%; }
+        }
     </style>
 </head>
 <body>
 
-<canvas id="dataNetwork"></canvas>
+<div id="container">
+    
+    <!-- Glossy Header -->
+    <div id="header">
+        <div class="header-title">
+            <h1>Equity Research</h1>
+        </div>
+        <a href="index.html" class="btn-classic">« Back to Main Hub</a>
+    </div>
 
-<div class="nav-header">
-    <h1>Equity Research</h1>
-    <a href="index.html" class="btn-back">← Back to Home</a>
+    <!-- Main Content Body -->
+    <div id="main-body">
+        <div class="stock-grid" id="stockGrid"></div>
+    </div>
+
+    <!-- Classic Footer -->
+    <div id="footer">
+        &copy; 2026 Pål Sandström. Best viewed in 1024x768 resolution.
+    </div>
+
 </div>
 
-<div class="stock-grid" id="stockGrid"></div>
-
 <script>
+    // Your original stock data array remains untouched
     const stocks = [
         { id: 'nichirei',     name: 'Nichirei Corp',     ticker: '2871.T', country: '🇯🇵 Japan', industry: 'Food & Logistics' },
         { id: 'optex_group',  name: 'OPTEX GROUP Co.',   ticker: '6914.T', country: '🇯🇵 Japan', industry: 'Industrial Sensors & Automation' }
@@ -122,6 +189,7 @@
 
     const gridContainer = document.getElementById('stockGrid');
 
+    // Rendering logic updated with the classic HTML structure
     stocks.forEach(stock => {
         const card = document.createElement('a');
         card.className = 'stock-card';
@@ -132,77 +200,12 @@
                 <h3 class="stock-name">${stock.name}</h3>
                 <span class="stock-ticker">${stock.ticker}</span>
             </div>
-            <p class="stock-info">🌎 <span>${stock.country}</span></p>
-            <p class="stock-info">🏢 <span>${stock.industry}</span></p>
+            <div class="stock-info"><strong>Location:</strong> ${stock.country}</div>
+            <div class="stock-info"><strong>Sector:</strong> ${stock.industry}</div>
         `;
         
         gridContainer.appendChild(card);
     });
-
-    // --- ANIMATED DATA NETWORK BACKGROUND ---
-    const canvas = document.getElementById("dataNetwork");
-    const ctx = canvas.getContext("2d");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    let particlesArray = [];
-    class Particle {
-        constructor() {
-            this.x = Math.random() * canvas.width;
-            this.y = Math.random() * canvas.height;
-            this.size = Math.random() * 2 + 1;
-            this.speedX = Math.random() * 0.8 - 0.4;
-            this.speedY = Math.random() * 0.8 - 0.4;
-        }
-        update() {
-            this.x += this.speedX;
-            this.y += this.speedY;
-            if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-            if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
-        }
-        draw() {
-            ctx.fillStyle = 'rgba(16, 185, 129, 0.9)'; 
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            ctx.fill();
-        }
-    }
-
-    function init() {
-        particlesArray = [];
-        for (let i = 0; i < 80; i++) { particlesArray.push(new Particle()); }
-    }
-
-    function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for (let i = 0; i < particlesArray.length; i++) {
-            particlesArray[i].update();
-            particlesArray[i].draw();
-            for (let j = i; j < particlesArray.length; j++) {
-                const dx = particlesArray[i].x - particlesArray[j].x;
-                const dy = particlesArray[i].y - particlesArray[j].y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                if (distance < 140) { 
-                    ctx.beginPath();
-                    ctx.strokeStyle = `rgba(56, 189, 248, ${0.8 - distance/140})`;
-                    ctx.lineWidth = 1.2; 
-                    ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
-                    ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
-                    ctx.stroke();
-                }
-            }
-        }
-        requestAnimationFrame(animate);
-    }
-
-    window.addEventListener('resize', () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        init();
-    });
-
-    init();
-    animate();
 </script>
 
 </body>
