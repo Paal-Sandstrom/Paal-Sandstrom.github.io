@@ -3,263 +3,240 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pål Sandström</title>
-    <link rel="icon" type="image/png" href="images/favicon.png">
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>Pål Sandström - Personal Homepage</title>
     <style>
-        * { box-sizing: border-box; }
+        /* === CLASSIC 2000s RESET & BODY === */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #e2e8f0; 
-            background-color: #050505; 
+            font-family: Tahoma, Verdana, Arial, sans-serif;
+            background-color: #EBF3FA; /* Classic pale Windows-esque blue */
+            color: #333333;
             margin: 0;
-            padding: 20px; 
-            min-height: 100vh;
+            padding: 20px;
             display: flex;
             justify-content: center;
-            align-items: center;
-            overflow-x: hidden;
         }
 
-        /* The Animated Background Canvas */
-        #dataNetwork {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.8; 
+        /* === MAIN WRAPPER (Now Responsive) === */
+        #container {
+            width: 85%; /* Scales with the monitor */
+            max-width: 1200px; /* Prevents text from becoming unreadable on ultrawide monitors */
+            background-color: #FFFFFF;
+            border: 1px solid #8FABCC;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
         }
 
-        /* Bento Grid Layout */
-        .bento-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
+        /* === GLOSSY HEADER === */
+        #header {
+            background: linear-gradient(to bottom, #4A90E2 0%, #003399 100%);
+            border-bottom: 2px solid #002266;
+            padding: 20px;
+            color: #FFFFFF;
+        }
+        #header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: normal;
+            text-shadow: 1px 1px 2px #000000;
+        }
+        #header p {
+            margin: 5px 0 0 0;
+            font-size: 14px;
+            color: #D9E6F2;
+        }
+
+        /* === CONTENT LAYOUT === */
+        #content {
+            display: flex;
+            padding: 20px;
             gap: 20px;
-            max-width: 1150px; 
-            width: 100%;
-            z-index: 1;
         }
 
-        /* Individual Glass Panels */
-        .bento-panel {
-            background-color: rgba(20, 25, 35, 0.7);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 35px; 
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.6);
-            transition: transform 0.3s ease, border-color 0.3s ease;
-        }
-        .bento-panel:hover {
-            transform: translateY(-5px);
-            border-color: rgba(16, 185, 129, 0.4);
-        }
-
-        /* Grid Spanning */
-        .panel-profile { grid-column: span 1; text-align: center; }
-        .panel-bio { grid-column: span 2; display: flex; flex-direction: column; justify-content: center;}
-        
-        /* Links Action Bar at the Bottom */
-        .panel-links { 
-            grid-column: span 3; 
-            display: flex; 
-            flex-direction: row; 
-            gap: 25px; 
-            justify-content: center;
-            align-items: center;
-            padding: 25px;
-        }
-
-        /* Mobile Responsiveness */
-        @media (max-width: 900px) {
-            .bento-grid { grid-template-columns: 1fr; }
-            .panel-profile, .panel-bio, .panel-links { grid-column: span 1; }
-            .panel-links { flex-direction: column; width: 100%; }
-            .panel-links .btn { width: 100%; }
-        }
-
-        /* Profile Elements */
-        .profile-img {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #10b981; 
-            margin-bottom: 15px;
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
-        }
-        h1 { margin: 0 0 5px 0; font-size: 2em; color: #f8fafc; }
-        .subtitle { color: #94a3b8; font-size: 1em; margin-top: 0; }
-        
-        /* General Paragraphs */
-        p { color: #cbd5e1; font-size: 1.1em; margin-bottom: 15px; }
-
-        /* === BIO TEXT STYLING === */
-        .bio-greeting { 
-            margin: 0 0 15px 0; 
-            font-size: 2.5em; 
-            color: #f8fafc; 
-        }
-        .text-gradient {
-            background: linear-gradient(135deg, #38bdf8, #10b981);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        /* Green Bar applied to all paragraphs in the bio panel */
-        .panel-bio p {
-            font-size: 1.15em;
-            color: #e2e8f0;
-            border-left: 4px solid #10b981;
-            padding-left: 15px;
-            margin-bottom: 20px;
-        }
-
-        /* Buttons */
-        .btn {
-            display: block;
+        /* === LEFT COLUMN (PROFILE) === */
+        #sidebar {
+            width: 200px;
             text-align: center;
-            padding: 16px 20px;
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            color: #ffffff;
+            flex-shrink: 0; /* Prevents the sidebar from squishing on medium screens */
+        }
+        .profile-img {
+            width: 180px;
+            max-width: 100%;
+            height: auto;
+            border: 3px double #8FABCC;
+            padding: 2px;
+            background: #FFFFFF;
+            margin-bottom: 15px;
+        }
+        
+        /* Classic Navigation Menu */
+        .nav-box {
+            background-color: #F4F8FC;
+            border: 1px solid #B0C4DE;
+            text-align: left;
+            padding: 10px;
+            font-size: 13px;
+        }
+        .nav-box h3 {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            color: #003399;
+            border-bottom: 1px dotted #B0C4DE;
+            padding-bottom: 5px;
+        }
+        .nav-box a {
+            display: block;
+            color: #0033CC;
             text-decoration: none;
-            border-radius: 8px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            font-size: 1.1em;
-            min-width: 220px;
+            margin-bottom: 8px;
         }
-        .btn:hover { box-shadow: 0 0 15px rgba(37, 99, 235, 0.5); transform: scale(1.02); }
-        .btn-secondary { background: transparent; border: 2px solid #10b981; color: #10b981; }
-        .btn-secondary:hover { background: rgba(16, 185, 129, 0.1); box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+        .nav-box a:hover {
+            text-decoration: underline;
+            color: #FF6600; /* Classic early 2000s hover orange */
+        }
 
-        /* Social Links */
-        .social-links { margin-top: 25px; }
-        .social-links a { 
-            color: #94a3b8; 
-            text-decoration: none; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 8px; 
-            margin: 10px 0; 
-            font-size: 1.05em; 
-            transition: color 0.3s; 
+        /* === RIGHT COLUMN (BIO) === */
+        #main-body {
+            flex: 1;
+            font-size: 14px;
+            line-height: 1.6;
         }
-        .social-links a:hover { color: #10b981; }
-        .social-links i { width: 20px; height: 20px; }
+        #main-body h2 {
+            color: #003399;
+            border-bottom: 1px solid #CCCCCC;
+            padding-bottom: 5px;
+            margin-top: 0;
+            font-size: 20px;
+        }
+        hr {
+            border: 0;
+            height: 1px;
+            background: #CCCCCC;
+            margin: 20px 0;
+        }
+
+        /* === 2000s 3D TACTILE BUTTONS === */
+        .button-container {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap; /* Allows buttons to wrap on smaller screens */
+        }
+        .btn-classic {
+            background: linear-gradient(to bottom, #F9F9F9 0%, #E0E0E0 100%);
+            border: 2px outset #FFFFFF;
+            border-bottom-color: #999999;
+            border-right-color: #999999;
+            color: #000000;
+            padding: 8px 16px;
+            text-decoration: none;
+            font-family: Tahoma, sans-serif;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        /* The "Press Down" Animation */
+        .btn-classic:active {
+            border: 2px inset #FFFFFF;
+            border-bottom-color: #FFFFFF;
+            border-right-color: #FFFFFF;
+            border-top-color: #999999;
+            border-left-color: #999999;
+            /* Shift padding to move text down and right */
+            padding: 9px 15px 7px 17px; 
+            background: #E0E0E0;
+        }
+
+        /* Primary button with blue tint */
+        .btn-primary {
+            background: linear-gradient(to bottom, #E6F0FA 0%, #B3D1F2 100%);
+        }
+        .btn-primary:active {
+            background: #B3D1F2;
+        }
+
+        /* === FOOTER === */
+        #footer {
+            background-color: #F4F8FC;
+            border-top: 1px solid #8FABCC;
+            text-align: center;
+            padding: 10px;
+            font-size: 11px;
+            color: #666666;
+        }
+
+        /* === RESPONSIVE FALLBACK FOR SMALL SCREENS === */
+        @media (max-width: 768px) {
+            #content {
+                flex-direction: column;
+            }
+            #sidebar {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .nav-box {
+                width: 100%;
+                max-width: 300px;
+            }
+            #container {
+                width: 95%; /* Take up more space on mobile */
+            }
+        }
     </style>
 </head>
 <body>
 
-<canvas id="dataNetwork"></canvas>
-
-<div class="bento-grid">
+<div id="container">
     
-    <div class="bento-panel panel-profile">
-        <img src="images/profile.jpg" alt="Pål Sandström" class="profile-img">
+    <!-- Glossy Header -->
+    <div id="header">
         <h1>Pål Sandström</h1>
-        <p class="subtitle">Economics Student @ Lund University</p>
+        <p>Economics and Business Student @ Lund University</p>
+    </div>
+
+    <!-- Main Content Area -->
+    <div id="content">
         
-        <div class="social-links">
-            <a href="mailto:paulsanmat@gmail.com"><i data-lucide="mail"></i> paulsanmat@gmail.com</a>
-            <a href="https://www.linkedin.com/in/pål-sandström" target="_blank"><i data-lucide="linkedin"></i> LinkedIn Profile</a>
-            <a href="#"><i data-lucide="map-pin"></i> Lund, Sweden</a>
+        <!-- Left Sidebar -->
+        <div id="sidebar">
+            <img src="images/profile.jpg" alt="Pål Sandström Profile Picture" class="profile-img">
+            
+            <div class="nav-box">
+                <h3>Contact & Links</h3>
+                <a href="mailto:paulsanmat@gmail.com">» Email Me</a>
+                <a href="https://www.linkedin.com/in/pål-sandström" target="_blank">» LinkedIn Profile</a>
+                <a href="#">» Lund, Sweden</a>
+            </div>
         </div>
+
+        <!-- Right Content Body -->
+        <div id="main-body">
+            <h2>Welcome to my Homepage</h2>
+            <p>Hello, I'm Pål. I am a 20-year-old Economics and Business student at <strong>Lund University</strong> specializing in International Business.</p>
+            
+            <p>My biggest interest lies in publicly traded securities, where I do a good amount of research on both stocks and specific corporate bonds. Recently, I've become very fascinated with the Japanese market so my research on niche Japanese door handle manufacturers is available here.</p>
+            
+            <p>Aside from that, I am a big fan of the Austrian school and I'm hoping to land a great job before the AI singularity wipes us all out.</p>
+            
+            <hr>
+
+            <!-- 3D Press-able Buttons -->
+            <div class="button-container">
+                <a href="resume.html" class="btn-classic btn-primary">View Resume Page</a>
+                <a href="stock-research.html" class="btn-classic">Read Stock Research</a>
+            </div>
+        </div>
+
     </div>
 
-    <div class="bento-panel panel-bio">
-        <h2 class="bio-greeting">Hello, I'm <span class="text-gradient">Pål</span>.</h2>
-        <p>I am a 20-year-old Economics and Business student at <strong>Lund University</strong> specializing in International Business.</p>
-        <p>My biggest interest lies in publicly traded securities, where I do a good amount of research on both stocks and specific corporate bonds. Recently, I've become very fascinated with the Japanese market so my research on niche Japanese door handle manufacturers is available here.</p>
-        <p>Aside from that, I am a big fan of the Austrian school and I'm hoping to land a great job before the AI singularity wipes us all out.</p>
-    </div>
-
-    <div class="bento-panel panel-links">
-        <a href="resume.html" class="btn">View Resume Page</a>
-        <a href="stock-research.html" class="btn btn-secondary">Stock Research</a>
+    <!-- Classic Footer -->
+    <div id="footer">
+        &copy; 2026 Pål Sandström. Best viewed in 1024x768 resolution.
     </div>
 
 </div>
-
-<script>
-    // --- 1. ANIMATED DATA NETWORK BACKGROUND ---
-    const canvas = document.getElementById("dataNetwork");
-    const ctx = canvas.getContext("2d");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    let particlesArray = [];
-    const numberOfParticles = 90;
-
-    class Particle {
-        constructor() {
-            this.x = Math.random() * canvas.width;
-            this.y = Math.random() * canvas.height;
-            this.size = Math.random() * 2 + 1;
-            this.speedX = Math.random() * 0.8 - 0.4;
-            this.speedY = Math.random() * 0.8 - 0.4;
-        }
-        update() {
-            this.x += this.speedX;
-            this.y += this.speedY;
-            if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-            if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
-        }
-        draw() {
-            ctx.fillStyle = 'rgba(16, 185, 129, 0.9)'; 
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            ctx.fill();
-        }
-    }
-
-    function init() {
-        particlesArray = [];
-        for (let i = 0; i < numberOfParticles; i++) {
-            particlesArray.push(new Particle());
-        }
-    }
-
-    function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for (let i = 0; i < particlesArray.length; i++) {
-            particlesArray[i].update();
-            particlesArray[i].draw();
-            for (let j = i; j < particlesArray.length; j++) {
-                const dx = particlesArray[i].x - particlesArray[j].x;
-                const dy = particlesArray[i].y - particlesArray[j].y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                if (distance < 140) { 
-                    ctx.beginPath();
-                    ctx.strokeStyle = `rgba(56, 189, 248, ${0.8 - distance/140})`;
-                    ctx.lineWidth = 1.2; 
-                    ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
-                    ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
-                    ctx.stroke();
-                }
-            }
-        }
-        requestAnimationFrame(animate);
-    }
-
-    window.addEventListener('resize', () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        init();
-    });
-
-    init();
-    animate();
-
-    // --- 2. INITIALIZE LUCIDE ICONS ---
-    lucide.createIcons();
-</script>
 
 </body>
 </html>
