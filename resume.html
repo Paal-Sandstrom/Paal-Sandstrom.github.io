@@ -6,304 +6,356 @@
     <title>Resume - Pål Sandström</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        * { box-sizing: border-box; }
+        /* === CLASSIC 2000s RESET & BODY === */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #cbd5e1;
-            background-color: #050505; 
+            font-family: Tahoma, Verdana, Arial, sans-serif;
+            background-color: #EBF3FA; /* Classic pale Windows-esque blue */
+            color: #333333;
             margin: 0;
-            padding: 40px 20px;
-            min-height: 100vh;
+            padding: 20px;
             display: flex;
             justify-content: center;
         }
 
-        /* The Animated Background Canvas */
-        #dataNetwork {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.6; 
+        /* === MAIN WRAPPER (Responsive) === */
+        #container {
+            width: 85%;
+            max-width: 1200px;
+            background-color: #FFFFFF;
+            border: 1px solid #8FABCC;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
         }
 
-        /* Glassmorphism Container */
-        .container {
-            background-color: rgba(20, 25, 35, 0.75);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 50px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-            max-width: 850px;
-            width: 100%;
-            z-index: 1;
-        }
-
-        /* Header & Toggle Button */
-        .header-top {
+        /* === GLOSSY HEADER === */
+        #header {
+            background: linear-gradient(to bottom, #4A90E2 0%, #003399 100%);
+            border-bottom: 2px solid #002266;
+            padding: 20px;
+            color: #FFFFFF;
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            border-bottom: 2px solid rgba(16, 185, 129, 0.3);
-            padding-bottom: 20px;
-            margin-bottom: 30px;
+            align-items: center;
         }
-        h1 { margin: 0 0 15px 0; color: #f8fafc; font-size: 2.5em; letter-spacing: 1px; }
-        
-        /* Updated Contact Info for Icons */
-        .contact-info { display: flex; flex-direction: column; gap: 8px; }
-        .contact-info p { 
-            margin: 0; 
-            font-size: 0.95em; 
-            color: #94a3b8; 
-            display: flex; 
-            align-items: center; 
-            gap: 10px; 
+        .header-title h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: normal;
+            text-shadow: 1px 1px 2px #000000;
         }
-        .contact-info i { width: 18px; height: 18px; color: #10b981; }
-        .contact-info a { color: #38bdf8; text-decoration: none; transition: color 0.2s; }
-        .contact-info a:hover { color: #10b981; }
-        
-        /* Language Toggle Button with Flexbox for Icon */
-        .toggle-btn {
-            background: rgba(16, 185, 129, 0.1);
-            color: #10b981;
-            border: 1px solid #10b981;
-            padding: 10px 18px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 10px rgba(16, 185, 129, 0.1);
+
+        /* === CONTACT INFO BAR === */
+        #contact-bar {
+            background-color: #F4F8FC;
+            border-bottom: 1px solid #B0C4DE;
+            padding: 10px 20px;
+            font-size: 13px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            color: #003399;
+        }
+        .contact-item {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 5px;
         }
-        .toggle-btn i { width: 18px; height: 18px; }
-        .toggle-btn:hover { 
-            background: #10b981; 
-            color: #050505;
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+        .contact-item a {
+            color: #0033CC;
+            text-decoration: none;
+        }
+        .contact-item a:hover {
+            text-decoration: underline;
+            color: #FF6600;
+        }
+        .contact-item i {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* === CONTENT LAYOUT === */
+        #main-body {
+            padding: 30px;
+            font-size: 14px;
+            line-height: 1.6;
         }
 
         /* Section Styling */
-        h2 { 
-            color: #38bdf8; 
-            border-bottom: 1px solid rgba(255,255,255,0.1); 
-            padding-bottom: 8px; 
-            margin-top: 40px; 
-            font-weight: 600;
+        h2 {
+            color: #003399;
+            border-bottom: 1px solid #CCCCCC;
+            padding-bottom: 5px;
+            margin-top: 30px;
+            font-size: 20px;
         }
-        .job { margin-bottom: 25px; }
-        .job-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px; }
-        .job-title { font-weight: bold; font-size: 1.15em; color: #f8fafc; }
-        .date { color: #10b981; font-size: 0.9em; font-family: monospace; }
-        .company { color: #94a3b8; font-style: italic; }
+        h2:first-child {
+            margin-top: 0;
+        }
         
-        ul { margin-top: 8px; padding-left: 20px; }
-        li { margin-bottom: 6px; }
-        strong { color: #f8fafc; }
+        /* Job Entries */
+        .job { margin-bottom: 25px; }
+        .job-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: baseline; 
+            margin-bottom: 3px; 
+        }
+        .job-title { 
+            font-weight: bold; 
+            font-size: 15px; 
+            color: #333333; 
+        }
+        .date { 
+            color: #666666; 
+            font-size: 13px; 
+            font-family: monospace; 
+        }
+        .company { 
+            color: #003399; 
+            font-style: italic; 
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+        ul { margin-top: 5px; padding-left: 25px; }
+        li { margin-bottom: 4px; }
 
-        /* Navigation */
-        .nav-bottom { margin-top: 50px; text-align: center; }
-        .btn-back {
+        /* === 2000s 3D TACTILE BUTTONS === */
+        .btn-classic {
+            background: linear-gradient(to bottom, #F9F9F9 0%, #E0E0E0 100%);
+            border: 2px outset #FFFFFF;
+            border-bottom-color: #999999;
+            border-right-color: #999999;
+            color: #000000;
+            padding: 8px 16px;
+            text-decoration: none;
+            font-family: Tahoma, sans-serif;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 12px 24px;
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            color: #ffffff;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: bold;
-            transition: all 0.3s ease;
         }
-        .btn-back i { width: 20px; height: 20px; }
-        .btn-back:hover { box-shadow: 0 0 15px rgba(37, 99, 235, 0.5); transform: translateY(-2px); }
+        .btn-classic:active {
+            border: 2px inset #FFFFFF;
+            border-bottom-color: #FFFFFF;
+            border-right-color: #FFFFFF;
+            border-top-color: #999999;
+            border-left-color: #999999;
+            padding: 9px 15px 7px 17px; 
+            background: #E0E0E0;
+        }
+        .btn-primary {
+            background: linear-gradient(to bottom, #E6F0FA 0%, #B3D1F2 100%);
+        }
+        .btn-primary:active {
+            background: #B3D1F2;
+        }
+
+        /* Specific Button Tweaks */
+        .header-btn { font-size: 12px; padding: 6px 12px; }
+        .header-btn:active { padding: 7px 11px 5px 13px; }
+        .header-btn i { width: 14px; height: 14px; }
+
+        /* === FOOTER === */
+        #footer {
+            background-color: #F4F8FC;
+            border-top: 1px solid #8FABCC;
+            text-align: center;
+            padding: 20px;
+        }
 
         /* Language Classes - Swedish is hidden by default */
         .lang-sv { display: none; }
 
-        /* Mobile tweaks */
-        @media (max-width: 600px) {
-            .header-top { flex-direction: column; gap: 20px; }
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            #header { flex-direction: column; gap: 15px; text-align: center; }
             .job-header { flex-direction: column; }
-            .container { padding: 30px 20px; }
+            #container { width: 95%; }
+            #contact-bar { flex-direction: column; gap: 10px; align-items: center; }
         }
     </style>
 </head>
 <body>
 
-<canvas id="dataNetwork"></canvas>
-
-<div class="container">
-    <div class="header-top">
-        <div>
+<div id="container">
+    
+    <!-- Glossy Header -->
+    <div id="header">
+        <div class="header-title">
             <h1>Pål Sandström</h1>
-            <div class="contact-info">
-                <p><i data-lucide="map-pin"></i> Magistratsvägen 55B, Lund, Sweden</p>
-                <p><i data-lucide="mail"></i> <a href="mailto:paulsanmat@gmail.com">paulsanmat@gmail.com</a></p>
-                <p><i data-lucide="phone"></i> +46 72 233 2622</p>
-                <p><i data-lucide="linkedin"></i> <a href="https://www.linkedin.com/in/pål-sandström" target="_blank">LinkedIn Profile</a></p>
-            </div>
         </div>
-        <button class="toggle-btn" onclick="toggleLanguage()">
+        <button class="btn-classic header-btn" onclick="toggleLanguage()">
             <i data-lucide="globe"></i> <span id="langBtnText">Byt till Svenska</span>
         </button>
     </div>
 
-    <div class="lang-en">
-        <h2>Profile</h2>
-        <p>Economics student at Lund University majoring in International Business. I combine academic knowledge with practical experience from entrepreneurship and international work.</p>
-    </div>
-    <div class="lang-sv">
-        <h2>Profil</h2>
-        <p>Ekonomistudent vid Lunds universitet med inriktning International Business. Jag kombinerar akademiska kunskaper med praktisk erfarenhet av egenföretagande och internationellt arbete.</p>
+    <!-- Contact Info Bar -->
+    <div id="contact-bar">
+        <div class="contact-item"><i data-lucide="map-pin"></i> Magistratsvägen 55B, Lund, Sweden</div>
+        <div class="contact-item"><i data-lucide="mail"></i> <a href="mailto:paulsanmat@gmail.com">paulsanmat@gmail.com</a></div>
+        <div class="contact-item"><i data-lucide="phone"></i> +46 72 233 2622</div>
+        <div class="contact-item"><i data-lucide="linkedin"></i> <a href="https://www.linkedin.com/in/pål-sandström" target="_blank">LinkedIn Profile</a></div>
     </div>
 
-    <div class="lang-en"><h2>Experience</h2></div>
-    <div class="lang-sv"><h2>Arbetslivserfarenhet</h2></div>
+    <!-- Main Content Body -->
+    <div id="main-body">
 
-    <div class="job">
-        <div class="job-header">
-            <div class="lang-en"><span class="job-title">E-commerce Business Owner</span></div>
-            <div class="lang-sv"><span class="job-title">Egenföretagare i E-handel</span></div>
-            
-            <div class="lang-en"><span class="date">Sep 2024 - Mar 2025</span></div>
-            <div class="lang-sv"><span class="date">September 2024 - Mars 2025</span></div>
+        <!-- Profile Section -->
+        <div class="lang-en">
+            <h2>Profile</h2>
+            <p>Economics student at Lund University majoring in International Business. I combine academic knowledge with practical experience from entrepreneurship and international work.</p>
         </div>
-        <div class="company">Silkroad (Partnership) | Lund, Sweden</div>
+        <div class="lang-sv">
+            <h2>Profil</h2>
+            <p>Ekonomistudent vid Lunds universitet med inriktning International Business. Jag kombinerar akademiska kunskaper med praktisk erfarenhet av egenföretagande och internationellt arbete.</p>
+        </div>
+
+        <!-- Experience Section -->
+        <div class="lang-en"><h2>Experience</h2></div>
+        <div class="lang-sv"><h2>Arbetslivserfarenhet</h2></div>
+
+        <div class="job">
+            <div class="job-header">
+                <div class="lang-en"><span class="job-title">E-commerce Business Owner</span></div>
+                <div class="lang-sv"><span class="job-title">Egenföretagare i E-handel</span></div>
+                
+                <div class="lang-en"><span class="date">Sep 2024 - Mar 2025</span></div>
+                <div class="lang-sv"><span class="date">September 2024 - Mars 2025</span></div>
+            </div>
+            <div class="company">Silkroad (Partnership) | Lund, Sweden</div>
+            <div class="lang-en">
+                <ul>
+                    <li>Founded "Silkroad" selling jewelry and clothing.</li>
+                    <li>Designed and continuously improved the e-commerce website.</li>
+                    <li>Ensured the business strictly followed current tax and corporate regulations in Sweden.</li>
+                    <li>Created marketing materials and managed digital advertising campaigns.</li>
+                </ul>
+            </div>
+            <div class="lang-sv">
+                <ul>
+                    <li>Grundade handelsbolaget "Silkroad" som sålde smycken och kläder</li>
+                    <li>Designade och förbättrade hemsidan</li>
+                    <li>Säkerställde att verksamheten följde gällande skatte- och företagsregler i Sverige</li>
+                    <li>Skapade marknadsföringsmaterial och digital reklam</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="job">
+            <div class="job-header">
+                <div class="lang-en"><span class="job-title">Lifeguard</span></div>
+                <div class="lang-sv"><span class="job-title">Livräddare</span></div>
+                <div class="lang-en"><span class="date">May 2023 - Sep 2023</span></div>
+                <div class="lang-sv"><span class="date">Maj - September, 2023</span></div>
+            </div>
+            <div class="company">Aquatic Management of Indianapolis | USA</div>
+            <div class="lang-en">
+                <ul>
+                    <li>Managed and resolved hazardous situations within the pool area.</li>
+                    <li>Maintained cleanliness and safety standards of the facility.</li>
+                    <li>Measured and adjusted chlorine and pH levels in the pool.</li>
+                </ul>
+            </div>
+            <div class="lang-sv">
+                <ul>
+                    <li>Tog hand om farliga situationer inom poolområdet</li>
+                    <li>Höll poolområdet rent</li>
+                    <li>Mätte och justerade klor och pH-nivån i poolen</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="job">
+            <div class="job-header">
+                <div class="lang-en"><span class="job-title">Volunteer</span></div>
+                <div class="lang-sv"><span class="job-title">Volontär</span></div>
+                <div class="lang-en"><span class="date">Jun 2022 - Aug 2022</span></div>
+                <div class="lang-sv"><span class="date">Juni - Augusti, 2022</span></div>
+            </div>
+            <div class="company">Gleaners Food Bank of Indiana | USA</div>
+            <div class="lang-en">
+                <ul>
+                    <li>Organized and sorted food items in warehouse storage areas.</li>
+                </ul>
+            </div>
+            <div class="lang-sv">
+                <ul>
+                    <li>Organiserade och sorterade livsmedel i lagerutrymmen</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Education Section -->
+        <div class="lang-en"><h2>Education</h2></div>
+        <div class="lang-sv"><h2>Utbildning</h2></div>
+
+        <div class="job">
+            <div class="job-header">
+                <div class="lang-en"><span class="job-title">BSc Business and Economics (International Business)</span></div>
+                <div class="lang-sv"><span class="job-title">Ekonomie Kandidatprogram, inriktning International Business</span></div>
+                <div class="lang-en"><span class="date">Sep 2024 - Jun 2027</span></div>
+                <div class="lang-sv"><span class="date">September 2024 - Juni 2027</span></div>
+            </div>
+            <div class="company">Lund University</div>
+            <div class="lang-en">
+                <ul>
+                    <li>Relevant coursework: Accounting, Law, Statistics, Management Control.</li>
+                </ul>
+            </div>
+            <div class="lang-sv">
+                <ul>
+                    <li>Relevanta kurser: redovisning, juridik, statistik, ekonomistyrning</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="job">
+            <div class="job-header">
+                <div class="lang-en"><span class="job-title">High School with "Honors Diploma"</span></div>
+                <div class="lang-sv"><span class="job-title">High School(Gymnaset) med "Honors Diploma"</span></div>
+                <div class="lang-en"><span class="date">Sep 2020 - May 2024</span></div>
+                <div class="lang-sv"><span class="date">September 2020 - Maj 2024</span></div>
+            </div>
+            <div class="company">Carmel High School | USA</div>
+        </div>
+
+        <!-- Skills Section -->
+        <div class="lang-en"><h2>Skills & Languages</h2></div>
+        <div class="lang-sv"><h2>Övriga Meriter & Språk</h2></div>
+        
         <div class="lang-en">
             <ul>
-                <li>Founded "Silkroad" selling jewelry and clothing.</li>
-                <li>Designed and continuously improved the e-commerce website.</li>
-                <li>Ensured the business strictly followed current tax and corporate regulations in Sweden.</li>
-                <li>Created marketing materials and managed digital advertising campaigns.</li>
+                <li><strong>IT & Data:</strong> Python (Pandas, NumPy - Good), Excel (Tables, Formulas - Good)</li>
+                <li><strong>Languages:</strong> Swedish (Native), English (Native-level), German (Basic)</li>
+                <li><strong>Other:</strong> Class B Driver's License</li>
             </ul>
         </div>
         <div class="lang-sv">
             <ul>
-                <li>Grundade handelsbolaget "Silkroad" som sålde smycken och kläder</li>
-                <li>Designade och förbättrade hemsidan</li>
-                <li>Säkerställde att verksamheten följde gällande skatte- och företagsregler i Sverige</li>
-                <li>Skapade marknadsföringsmaterial och digital reklam</li>
+                <li><strong>IT- och systemkunskaper:</strong> Python - Goda kunskaper (Pandas, NumPy), Excel - Goda kunskaper (tabeller, formler)</li>
+                <li><strong>Språk:</strong> Svenska - Modersmål, Engelska - Modersmål, Tyska - Grundläggande</li>
+                <li><strong>Körkort:</strong> B</li>
             </ul>
         </div>
+
     </div>
 
-    <div class="job">
-        <div class="job-header">
-            <div class="lang-en"><span class="job-title">Lifeguard</span></div>
-            <div class="lang-sv"><span class="job-title">Livräddare</span></div>
-            <div class="lang-en"><span class="date">May 2023 - Sep 2023</span></div>
-            <div class="lang-sv"><span class="date">Maj - September, 2023</span></div>
-        </div>
-        <div class="company">Aquatic Management of Indianapolis | USA</div>
-        <div class="lang-en">
-            <ul>
-                <li>Managed and resolved hazardous situations within the pool area.</li>
-                <li>Maintained cleanliness and safety standards of the facility.</li>
-                <li>Measured and adjusted chlorine and pH levels in the pool.</li>
-            </ul>
-        </div>
-        <div class="lang-sv">
-            <ul>
-                <li>Tog hand om farliga situationer inom poolområdet</li>
-                <li>Höll poolområdet rent</li>
-                <li>Mätte och justerade klor och pH-nivån i poolen</li>
-            </ul>
-        </div>
+    <!-- Footer with Back Button -->
+    <div id="footer">
+        <a href="index.html" class="btn-classic btn-primary"><i data-lucide="arrow-left"></i> Back to Main Hub</a>
     </div>
 
-    <div class="job">
-        <div class="job-header">
-            <div class="lang-en"><span class="job-title">Volunteer</span></div>
-            <div class="lang-sv"><span class="job-title">Volontär</span></div>
-            <div class="lang-en"><span class="date">Jun 2022 - Aug 2022</span></div>
-            <div class="lang-sv"><span class="date">Juni - Augusti, 2022</span></div>
-        </div>
-        <div class="company">Gleaners Food Bank of Indiana | USA</div>
-        <div class="lang-en">
-            <ul>
-                <li>Organized and sorted food items in warehouse storage areas.</li>
-            </ul>
-        </div>
-        <div class="lang-sv">
-            <ul>
-                <li>Organiserade och sorterade livsmedel i lagerutrymmen</li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="lang-en"><h2>Education</h2></div>
-    <div class="lang-sv"><h2>Utbildning</h2></div>
-
-    <div class="job">
-        <div class="job-header">
-            <div class="lang-en"><span class="job-title">BSc Business and Economics (International Business)</span></div>
-            <div class="lang-sv"><span class="job-title">Ekonomie Kandidatprogram, inriktning International Business</span></div>
-            <div class="lang-en"><span class="date">Sep 2024 - Jun 2027</span></div>
-            <div class="lang-sv"><span class="date">September 2024 - Juni 2027</span></div>
-        </div>
-        <div class="company">Lund University</div>
-        <div class="lang-en">
-            <ul>
-                <li>Relevant coursework: Accounting, Law, Statistics, Management Control.</li>
-            </ul>
-        </div>
-        <div class="lang-sv">
-            <ul>
-                <li>Relevanta kurser: redovisning, juridik, statistik, ekonomistyrning</li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="job">
-        <div class="job-header">
-            <div class="lang-en"><span class="job-title">High School with "Honors Diploma"</span></div>
-            <div class="lang-sv"><span class="job-title">High School(Gymnaset) med "Honors Diploma"</span></div>
-            <div class="lang-en"><span class="date">Sep 2020 - May 2024</span></div>
-            <div class="lang-sv"><span class="date">September 2020 - Maj 2024</span></div>
-        </div>
-        <div class="company">Carmel High School | USA</div>
-    </div>
-
-    <div class="lang-en"><h2>Skills & Languages</h2></div>
-    <div class="lang-sv"><h2>Övriga Meriter & Språk</h2></div>
-    
-    <div class="lang-en">
-        <ul>
-            <li><strong>IT & Data:</strong> Python (Pandas, NumPy - Good), Excel (Tables, Formulas - Good)</li>
-            <li><strong>Languages:</strong> Swedish (Native), English (Native-level), German (Basic)</li>
-            <li><strong>Other:</strong> Class B Driver's License</li>
-        </ul>
-    </div>
-    <div class="lang-sv">
-        <ul>
-            <li><strong>IT- och systemkunskaper:</strong> Python - Goda kunskaper (Pandas, NumPy), Excel - Goda kunskaper (tabeller, formler)</li>
-            <li><strong>Språk:</strong> Svenska - Modersmål, Engelska - Modersmål, Tyska - Grundläggande</li>
-            <li><strong>Körkort:</strong> B</li>
-        </ul>
-    </div>
-    
-    <div class="nav-bottom">
-        <a href="index.html" class="btn-back"><i data-lucide="arrow-left"></i> Back to Main Hub</a>
-    </div>
 </div>
 
 <script>
-    // 1. Language Toggle Logic
+    // 1. Language Toggle Logic (Untouched)
     let currentLang = 'en';
 
     function toggleLanguage() {
         const enElements = document.querySelectorAll('.lang-en');
         const svElements = document.querySelectorAll('.lang-sv');
-        const btnText = document.getElementById('langBtnText'); // Targeting just the text span
+        const btnText = document.getElementById('langBtnText'); 
 
         if (currentLang === 'en') {
             enElements.forEach(el => el.style.display = 'none');
@@ -318,76 +370,7 @@
         }
     }
 
-    // 2. Animated Data Network Background
-    const canvas = document.getElementById("dataNetwork");
-    const ctx = canvas.getContext("2d");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    let particlesArray = [];
-    const numberOfParticles = 90;
-
-    class Particle {
-        constructor() {
-            this.x = Math.random() * canvas.width;
-            this.y = Math.random() * canvas.height;
-            this.size = Math.random() * 2 + 1;
-            this.speedX = Math.random() * 0.8 - 0.4;
-            this.speedY = Math.random() * 0.8 - 0.4;
-        }
-        update() {
-            this.x += this.speedX;
-            this.y += this.speedY;
-            if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-            if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
-        }
-        draw() {
-            ctx.fillStyle = 'rgba(16, 185, 129, 0.9)'; 
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            ctx.fill();
-        }
-    }
-
-    function init() {
-        particlesArray = [];
-        for (let i = 0; i < numberOfParticles; i++) {
-            particlesArray.push(new Particle());
-        }
-    }
-
-    function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for (let i = 0; i < particlesArray.length; i++) {
-            particlesArray[i].update();
-            particlesArray[i].draw();
-            for (let j = i; j < particlesArray.length; j++) {
-                const dx = particlesArray[i].x - particlesArray[j].x;
-                const dy = particlesArray[i].y - particlesArray[j].y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                if (distance < 140) { 
-                    ctx.beginPath();
-                    ctx.strokeStyle = `rgba(56, 189, 248, ${0.8 - distance/140})`;
-                    ctx.lineWidth = 1.2; 
-                    ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
-                    ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
-                    ctx.stroke();
-                }
-            }
-        }
-        requestAnimationFrame(animate);
-    }
-
-    window.addEventListener('resize', () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        init();
-    });
-
-    init();
-    animate();
-
-    // 3. Initialize Lucide Icons
+    // 2. Initialize Lucide Icons
     lucide.createIcons();
 </script>
 
